@@ -38,3 +38,24 @@ fp-info-cache
 
 # Local project settings
 *.kicad_prl
+
+# ── PlatformIO / Arduino build artefacts ─────────────────────────────
+.pio/
+.pioenvs/
+.piolibdeps/
+.vscode/
+*.elf
+*.hex
+*.bin
+# PlatformIO unit-test output
+.piotest/
+# Serial monitor logs
+*.log
+# Arduino CLI build cache
+build/
+# Core dumps (Espressif)
+core*
+# Cloud IDE settings (optional)
+.clangd/
+.idea/
+
