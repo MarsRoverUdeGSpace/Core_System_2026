@@ -59,3 +59,41 @@ core*
 .clangd/
 .idea/
 
+# ── MicroPython bytecode & CPython caches ────────────────────────────
+*.mpy
+__pycache__/
+*.pyc
+*.pyo
+
+# ── Virtual environments ─────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Test & type-check caches ─────────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ── Editor/IDE noise ─────────────────────────────────────────────────
+.vscode/
+.idea/
+.ropeproject/
+
+# ── Firmware / deployment artefacts (ESP32/RP2040/etc.) ─────────────
+firmware*.bin
+*.bin
+*.elf
+*.map
+*.uf2
+
+# ── Tool configs & logs (local) ──────────────────────────────────────
+.mpremote.json
+rshell.history
+ampy.log
+*.log
+
+# ── Optional: keep real secrets local (use template in Git) ─────────
+# secrets.py
