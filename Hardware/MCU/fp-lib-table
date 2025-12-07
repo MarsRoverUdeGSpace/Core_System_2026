@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name Core_System_2026)
+       (type "KiCad")
+       (uri "${KIPRJMOD}/../Libraries/Footprints/Core_System_2026.pretty")
+       (options "")
+       (descr "Core System footprints"))
+)
