@@ -119,3 +119,5 @@ fp-info-cache
 ############################
 
 *.log
+src/micro-ROS-Agent/
+src/micro_ros_msgs/
