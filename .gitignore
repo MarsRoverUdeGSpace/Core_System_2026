@@ -1,99 +1,121 @@
-# For PCBs designed using KiCad: https://www.kicad.org/
-# Format documentation: https://kicad.org/help/file-formats/
+############################
+# OS / editor junk
+############################
 
-# Temporary files
-*.000
-*.bak
-*.bck
-*.kicad_pcb-bak
-*.kicad_sch-bak
-*-backups
-*-cache*
-*-bak
-*-bak*
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Vim / editors
 *~
-~*
-_autosave-*
-\#auto_saved_files\#
+*.swp
+*.swo
 *.tmp
-*-save.pro
-*-save.kicad_pcb
-fp-info-cache
-~*.lck
-\#auto_saved_files#
 
-# Netlist files (exported from Eeschema)
-*.net
+############################
+# Python / MicroPython
+############################
 
-# Autorouter files (exported from Pcbnew)
-*.dsn
-*.ses
-
-# Exported BOM files
-*.xml
-*.csv
-
-# Archived Backups (KiCad 6.0)
-**/*-backups/*.zip
-
-# Local project settings
-*.kicad_prl
-
-# ── PlatformIO / Arduino build artefacts ─────────────────────────────
-.pio/
-.pioenvs/
-.piolibdeps/
-.vscode/
-*.elf
-*.hex
-*.bin
-# PlatformIO unit-test output
-.piotest/
-# Serial monitor logs
-*.log
-# Arduino CLI build cache
-build/
-# Core dumps (Espressif)
-core*
-# Cloud IDE settings (optional)
-.clangd/
-.idea/
-
-# ── MicroPython bytecode & CPython caches ────────────────────────────
-*.mpy
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
+*.pyd
 
-# ── Virtual environments ─────────────────────────────────────────────
+.mypy_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Virtualenvs
 .venv/
 venv/
 env/
+.env
+.env.*
 
-# ── Test & type-check caches ─────────────────────────────────────────
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.coverage
-htmlcov/
+############################
+# ROS 2 / colcon workspace
+############################
 
-# ── Editor/IDE noise ─────────────────────────────────────────────────
-.vscode/
-.idea/
-.ropeproject/
+# Standard colcon/ament outputs
+build/
+install/
+log/
 
-# ── Firmware / deployment artefacts (ESP32/RP2040/etc.) ─────────────
-firmware*.bin
-*.bin
+############################
+# C / C++ / CMake / Make
+############################
+
+# Local CMake build dirs (CLion, etc.)
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+CTestTestfile.cmake
+cmake_install.cmake
+
+# Generic build artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+
+############################
+# PlatformIO / Arduino / MCU
+############################
+
+# PlatformIO
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# Arduino / generic firmware binaries
 *.elf
-*.map
-*.uf2
+*.hex
+*.bin
 
-# ── Tool configs & logs (local) ──────────────────────────────────────
-.mpremote.json
-rshell.history
-ampy.log
+# ESP-IDF / other firmware builds (covered by build/)
+# (Per-project 'build/' dirs will also be ignored by the build/ rule above)
+
+############################
+# IDE / tooling
+############################
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains / CLion
+.idea/
+
+# Language server caches
+.ccls-cache/
+.clangd/
+
+############################
+# KiCad
+############################
+
+# KiCad 6/7+ backup directories (e.g. MCU-backups/)
+*-backups/
+
+# Per-project footprint cache
+fp-info-cache
+
+# KiCad project-local settings (non-essential)
+*.kicad_prl
+
+# Optional: KiCad autobackups
+*.kicad_sch-bak
+*.kicad_pcb-bak
+
+############################
+# Misc logs / dumps
+############################
+
 *.log
-
-# ── Optional: keep real secrets local (use template in Git) ─────────
-# secrets.py
