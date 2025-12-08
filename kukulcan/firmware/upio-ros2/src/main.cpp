@@ -1,9 +1,18 @@
+/**
+ * @file main.cpp
+ * @brief Arduino entry point for upio-ros2 firmware.
+ */
+
 #include <Arduino.h>
-#include "RTE.h"
+#include "app.h"
 
-// Inicializamos la capa RTE
-void setup() { RTE_Init(); }
+/**
+ * @brief Initialize application layer.
+ */
+void setup() { app_Init(); }
 
-// Mantenemos la capa RTE corriendo
-void loop() { RTE_Run(); }
+/**
+ * @brief Periodic application execution.
+ */
+void loop() { app_Run(); }
 
