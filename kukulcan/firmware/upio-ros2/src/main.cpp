@@ -7,12 +7,16 @@
 #include "app.h"
 
 /**
- * @brief Initialize application layer.
+ * @brief Initialize application layer and start tasks.
  */
-void setup() { app_Init(); }
+void setup(void)
+{
+  app_Init();
+  app_StartTasks();
+}
 
 /**
- * @brief Periodic application execution.
+ * @brief Idle loop; work is done in FreeRTOS tasks.
  */
-void loop() { app_Run(); }
+void loop(void){}
 

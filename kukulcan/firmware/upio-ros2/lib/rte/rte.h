@@ -28,12 +28,12 @@
 
 typedef struct MicroRosStateTag
 {
-  rcl_publisher_t   publis;
+  rcl_publisher_t    publis;
   rcl_subscription_t subs;
-  rclc_executor_t   executor;
-  rclc_support_t    support;
-  rcl_allocator_t   allocator;
-  rcl_node_t        node;
+  rclc_executor_t    executor;
+  rclc_support_t     support;
+  rcl_allocator_t    allocator;
+  rcl_node_t         node;
 } MicroRosState;
 
 /**
@@ -42,7 +42,7 @@ typedef struct MicroRosStateTag
 void rte_Init(void);
 
 /**
- * @brief Execute micro-ROS executor step.
+ * @brief Execute one micro-ROS step (publish + spin).
  */
 void rte_Run(void);
 
@@ -52,5 +52,4 @@ void rte_Run(void);
  * @return Pointer to MicroRosState.
  */
 MicroRosState * rte_GetState(void);
-
 
