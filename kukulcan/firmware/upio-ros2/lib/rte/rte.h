@@ -46,10 +46,3 @@ void rte_Init(void);
  */
 void rte_Run(void);
 
-/**
- * @brief Get pointer to internal micro-ROS state.
- *
- * @return Pointer to MicroRosState.
- */
-MicroRosState * rte_GetState(void);
-

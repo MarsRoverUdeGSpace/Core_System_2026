@@ -4,10 +4,16 @@
  */
 
 #include "rte.h"
+#include "config.h"
 
 #include <std_msgs/msg/string.h>
 #include <stdio.h>
 #include <string.h>
+
+static constexpr const char * RTE_NODE           = "kukulcan";
+static constexpr const char * RTE_TOPIC_PUB      = "app_hello";
+static constexpr const char * RTE_TOPIC_SUB      = "app_in";
+static constexpr uint32_t     RTE_SPIN_PERIOD_MS = 10U;
 
 /* Internal state */
 static MicroRosState rte_state;
@@ -37,20 +43,12 @@ static void rte_sub_callback(const void * msgin)
 }
 
 /**
- * @brief Return pointer to RTE state.
- */
-MicroRosState * rte_GetState(void)
-{
-  return &rte_state;
-}
-
-/**
  * @brief Initialize serial transport, allocator, support, node, entities, and executor.
  */
 void rte_Init(void)
 {
-  Serial.begin(921600);
-  set_microros_serial_transports(Serial);
+  config_init();
+  set_microros_serial_transports(rte_serial);
   delay(2000U);
 
   rte_state.allocator = rcl_get_default_allocator();
@@ -63,7 +61,7 @@ void rte_Init(void)
 
   RCCHECK(rclc_node_init_default(
       &rte_state.node,
-      "kukulcan",
+      RTE_NODE,
       "",
       &rte_state.support));
 
@@ -72,7 +70,7 @@ void rte_Init(void)
       &rte_state.publis,
       &rte_state.node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-      "app_hello"));
+      RTE_TOPIC_PUB));
 
   rte_pub_msg.data.data     = rte_pub_buffer;
   rte_pub_msg.data.size     = 0U;
@@ -83,7 +81,7 @@ void rte_Init(void)
       &rte_state.subs,
       &rte_state.node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-      "app_in"));
+      RTE_TOPIC_SUB));
 
   rte_sub_msg.data.data     = rte_sub_buffer;
   rte_sub_msg.data.size     = 0U;
@@ -138,6 +136,6 @@ void rte_Run(void)
 
   RCCHECK(rclc_executor_spin_some(
       &rte_state.executor,
-      RCL_MS_TO_NS(10U)));
+      RCL_MS_TO_NS(RTE_SPIN_PERIOD_MS)));
 }
 
