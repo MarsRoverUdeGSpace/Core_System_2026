@@ -253,7 +253,28 @@
     "equivalence_files": []
   },
   "erc": {
-    "erc_exclusions": [],
+    "erc_exclusions": [
+      [
+        "lib_symbol_mismatch|2197100|1041400|45c3795f-370f-44a5-9c87-9bf2d4f8e6d8|00000000-0000-0000-0000-000000000000|||",
+        ""
+      ],
+      [
+        "pin_to_pin|1282700|2349500|dc2b194a-65fe-4c71-9db2-68d42cff69a7|cea179d9-d532-4204-bdb1-f5656dca98e5|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7",
+        ""
+      ],
+      [
+        "pin_to_pin|1282700|2374900|5a61bce0-8a7c-4ab0-98ff-1b6b153b37c7|9ec82d2b-adff-4b20-b8d3-5db6d227b099|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7",
+        ""
+      ],
+      [
+        "pin_to_pin|1612900|1841500|a81c264b-f71b-4a3d-bd09-5fc789437bb7|5a61bce0-8a7c-4ab0-98ff-1b6b153b37c7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7",
+        ""
+      ],
+      [
+        "pin_to_pin|1778000|2260600|9d58cfc7-b430-428b-9a75-b2309cf9704c|cea179d9-d532-4204-bdb1-f5656dca98e5|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7|/6c5eb290-7d16-4623-8042-ad442bc9f2a7",
+        ""
+      ]
+    ],
     "meta": {
       "version": 0
     },
@@ -507,8 +528,8 @@
         "line_style": 0,
         "name": "Buttons",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 1,
-        "schematic_color": "rgb(255, 242, 252)",
+        "priority": 3,
+        "schematic_color": "rgb(255, 185, 199)",
         "wire_width": 6
       },
       {
@@ -516,8 +537,16 @@
         "line_style": 0,
         "name": "I2C",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 3,
-        "schematic_color": "rgb(196, 0, 255)",
+        "priority": 5,
+        "schematic_color": "rgb(255, 209, 98)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "name": "Jetson",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 0,
+        "schematic_color": "rgb(99, 135, 255)",
         "wire_width": 6
       },
       {
@@ -525,8 +554,17 @@
         "line_style": 0,
         "name": "Leds",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 0,
-        "schematic_color": "rgb(5, 255, 170)",
+        "priority": 2,
+        "schematic_color": "rgb(255, 251, 245)",
+        "wire_width": 6
+      },
+      {
+        "bus_width": 12,
+        "line_style": 0,
+        "name": "SPI",
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "priority": 1,
+        "schematic_color": "rgb(130, 255, 235)",
         "wire_width": 6
       },
       {
@@ -534,8 +572,8 @@
         "line_style": 0,
         "name": "USB",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 4,
-        "schematic_color": "rgb(37, 255, 0)",
+        "priority": 6,
+        "schematic_color": "rgb(175, 255, 90)",
         "wire_width": 6
       },
       {
@@ -543,8 +581,8 @@
         "line_style": 0,
         "name": "XTAL",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "priority": 2,
-        "schematic_color": "rgb(0, 245, 255)",
+        "priority": 4,
+        "schematic_color": "rgb(97, 255, 182)",
         "wire_width": 6
       }
     ],
@@ -573,6 +611,14 @@
       {
         "netclass": "Leds",
         "pattern": "LED*"
+      },
+      {
+        "netclass": "SPI",
+        "pattern": "SPI*"
+      },
+      {
+        "netclass": "Jetson",
+        "pattern": "JT*"
       }
     ]
   },
