@@ -5,7 +5,7 @@
 - `kukulcan/hardware/MCU/`: KiCad project files (`MCU.kicad_*`) and board exports (e.g., `MCU.stl`).
 - `kukulcan/hardware/Libraries/`: shared footprints and 3D models.
 - `kukulcan/hardware/mfr/`: manufacturing outputs (Gerbers, drills, job file, fab zip, BOM/CPL under `mfr/pcba/`).
-- `kukulcan/hardware/MCU/jlcpcb/`: JLCPCB exports (`gerber/`, `production_files/`).
+- `kukulcan/hardware/MCU/jlcpcb/`: local JLCPCB exports (`gerber/`, `production_files/`); keep out of commits unless explicitly requested.
 - `kukulcan/firmware/upy/`: MicroPython firmware (drivers and UI).
 - `src/`: ROS 2 workspace root (packages will live under `src/<package_name>/`).
 - `docs/`: datasheets, design notes, reference PDFs, and images.
@@ -46,4 +46,5 @@ If a module ships its own README, prefer those commands over generic ones.
 ## Security & Configuration Tips
 
 - Avoid committing build artifacts; keep them in `build/` and `log/`.
-- Manufacturing exports in `kukulcan/hardware/mfr/` and `kukulcan/hardware/MCU/jlcpcb/` are tracked artifacts; regenerate when the PCB changes and label revs consistently (e.g., `MCU_revA_*`).
+- Manufacturing exports in `kukulcan/hardware/mfr/` are tracked artifacts; regenerate when the PCB changes and label revs consistently (e.g., `MCU_revA_*`).
+- Large exports (e.g., `*.stl`) must use Git LFS; run `git lfs install` and ensure `.gitattributes` tracks `*.stl`.
