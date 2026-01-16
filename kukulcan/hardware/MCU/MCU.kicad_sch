@@ -13016,6 +13016,36 @@
 		)
 		(uuid "6a46abe4-fa9e-480a-b6b8-b3f4d91845aa")
 	)
+	(label "RF_IN"
+		(at 76.2 219.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "70a8f3f4-31e7-47de-a8b4-72fdc744db39")
+	)
+	(label "RF1"
+		(at 72.39 195.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "77e2cb75-a9f7-4e54-bc6a-b473f3438fdf")
+	)
+	(label "RF2"
+		(at 80.01 209.55 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "820a1969-3bb5-420a-afe4-1018f04ed3e8")
+	)
 	(label "XOUT32"
 		(at 193.04 171.45 0)
 		(effects
@@ -14362,6 +14392,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C23186"
+			(at 36.83 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 36.83 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAF5101T5E"
+			(at 36.83 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f6a1c01a-226c-4e04-8d9a-fdafa3c8cad6")
 		)
@@ -14423,6 +14480,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 77.47 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C19702"
+			(at 77.47 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 77.47 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A106KP8NNNC"
 			(at 77.47 67.31 0)
 			(effects
 				(font
@@ -14500,6 +14584,33 @@
 		)
 		(property "Field5" ""
 			(at 125.73 224.79 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2889392"
+			(at 125.73 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 125.73 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
+			(at 125.73 224.79 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14618,7 +14729,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Fiducial:Fiducial_Cross_1.5mm_Mask2mm"
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask3mm"
 			(at 328.93 205.74 0)
 			(effects
 				(font
@@ -14637,6 +14748,33 @@
 			)
 		)
 		(property "Description" "Fiducial Marker"
+			(at 328.93 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 328.93 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 328.93 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 328.93 205.74 0)
 			(effects
 				(font
@@ -14701,6 +14839,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 49.53 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 49.53 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 49.53 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 49.53 134.62 0)
 			(effects
 				(font
@@ -14838,6 +15003,33 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 80.01 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C148128"
+			(at 80.01 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "muRata"
+			(at 80.01 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "LQW18AN27NG00D"
 			(at 80.01 213.36 0)
 			(effects
 				(font
@@ -15327,6 +15519,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+3V3")
+		(at 220.98 50.8 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1d176563-3ae2-41e2-8b8e-99e88eab3782")
+		(property "Reference" "#PWR05"
+			(at 220.98 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 217.17 49.022 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 220.98 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 220.98 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 220.98 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c6de1564-bfd0-4a5d-b431-c46dec5eb5e8")
+		)
+		(instances
+			(project "MCU"
+				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
+					(reference "#PWR05")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Memory_Flash:W25Q128JVS")
 		(at 220.98 63.5 0)
 		(unit 1)
@@ -15345,7 +15602,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "W25Q256JWEIQ"
+		(property "Value" "W25Q256JVEIQ"
 			(at 232.41 64.7699 0)
 			(effects
 				(font
@@ -15354,7 +15611,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Core_System_2026:W25Q256JWEIQ"
+		(property "Footprint" "Core_System_2026:W25Q256JVEIQ"
 			(at 220.98 40.64 0)
 			(effects
 				(font
@@ -15374,6 +15631,33 @@
 		)
 		(property "Description" "128Mbit / 16MiB Serial Flash Memory, Standard/Dual/Quad SPI, 2.7-3.6V, SOIC-8"
 			(at 220.98 35.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C97522"
+			(at 220.98 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Winbond"
+			(at 220.98 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "W25Q256JVEIQ"
+			(at 220.98 63.5 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15467,6 +15751,33 @@
 			)
 		)
 		(property "Field5" ""
+			(at 199.39 191.77 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2889392"
+			(at 199.39 191.77 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 199.39 191.77 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
 			(at 199.39 191.77 90)
 			(effects
 				(font
@@ -15614,6 +15925,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C158012"
+			(at 154.94 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "JST"
+			(at 154.94 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "B2B-XH-A(LF)(SN)"
+			(at 154.94 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b918fd4e-e4b7-4354-945f-e2970f3fa1d9")
 		)
@@ -15673,6 +16011,33 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 92.71 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2889392"
+			(at 92.71 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 92.71 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
 			(at 92.71 50.8 0)
 			(effects
 				(font
@@ -15748,6 +16113,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C25585"
+			(at 101.6 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 101.6 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAJ0102T5E"
+			(at 101.6 50.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "95f782b0-be18-4903-8373-f5f352dad52a")
 		)
@@ -15791,7 +16183,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_Coaxial:U.FL_Molex_MCRF_73412-0110_Vertical"
+		(property "Footprint" "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical"
 			(at 88.9 219.71 0)
 			(effects
 				(font
@@ -15810,6 +16202,33 @@
 			)
 		)
 		(property "Description" "coaxial connector (BNC, SMA, SMB, SMC, Cinch/RCA, LEMO, ...)"
+			(at 88.9 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C3172499"
+			(at 88.9 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Amphenol"
+			(at 88.9 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "132134-10"
 			(at 88.9 219.71 0)
 			(effects
 				(font
@@ -15880,6 +16299,33 @@
 		)
 		(property "Description" "Inductor"
 			(at 314.96 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C395081"
+			(at 314.96 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "FH"
+			(at 314.96 27.94 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "VHF160808H2N0ST"
+			(at 314.96 27.94 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15983,6 +16429,33 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 165.1 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 165.1 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 165.1 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 				(hide yes)
 			)
 		)
@@ -16122,6 +16595,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C19702"
+			(at 113.03 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 113.03 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A106KP8NNNC"
+			(at 113.03 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "212a374c-a8be-45b4-b731-9d0f2d59da84")
 		)
@@ -16185,6 +16685,33 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x04, script generated"
+			(at 154.94 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C144395"
+			(at 154.94 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "JST"
+			(at 154.94 135.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "B4B-XH-A(LF)(SN)"
 			(at 154.94 135.89 0)
 			(effects
 				(font
@@ -16335,6 +16862,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 153.67 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 153.67 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 153.67 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "83f63648-ed77-4a48-868e-4ea9e7b55000")
 		)
@@ -16403,6 +16957,33 @@
 			)
 		)
 		(property "Field5" ""
+			(at 95.25 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C25585"
+			(at 95.25 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 95.25 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAJ0102T5E"
 			(at 95.25 104.14 90)
 			(effects
 				(font
@@ -16539,6 +17120,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 124.46 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 124.46 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 124.46 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 124.46 67.31 0)
 			(effects
 				(font
@@ -16688,6 +17296,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C25170729"
+			(at 87.63 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YONGYUTAI"
+			(at 87.63 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "YLED0805W"
+			(at 87.63 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0d71ece0-8fe8-4bda-9fee-d0f85841cc07")
 		)
@@ -16826,6 +17461,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C15127"
+			(at 101.6 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "AOS"
+			(at 101.6 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "AO3401A"
+			(at 101.6 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a06c6815-9b99-4378-aa4d-a4a9d7d3f67e")
 		)
@@ -16890,6 +17552,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 265.43 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2168725"
+			(at 265.43 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 265.43 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "C0603C103K8RACTU"
 			(at 265.43 49.53 0)
 			(effects
 				(font
@@ -17108,6 +17797,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C3020560"
+			(at 219.71 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Global Connector Technology"
+			(at 219.71 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "USB4105-GF-A"
+			(at 219.71 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "A5"
 			(uuid "d34bf314-957d-4b4f-9100-60d615403006")
 		)
@@ -17207,6 +17923,33 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
+			(at 316.23 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 316.23 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 316.23 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 316.23 182.88 0)
 			(effects
 				(font
@@ -17347,6 +18090,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C1592"
+			(at 325.12 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 325.12 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A105KO8NNNC"
+			(at 325.12 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4383e071-4e9a-4c54-b7e0-214522548927")
 		)
@@ -17410,6 +18180,33 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
+			(at 341.63 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 341.63 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 341.63 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 341.63 182.88 0)
 			(effects
 				(font
@@ -17542,6 +18339,33 @@
 			)
 		)
 		(property "Description" "800mA Low-Dropout Linear Regulator, 3.3V fixed output, TO-220/TO-252/TO-263/SOT-223"
+			(at 134.62 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C37359"
+			(at 134.62 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TI"
+			(at 134.62 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "TLV1117-33IDCYR"
 			(at 134.62 63.5 0)
 			(effects
 				(font
@@ -17694,6 +18518,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C2889392"
+			(at 199.39 194.31 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 199.39 194.31 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
+			(at 199.39 194.31 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a3d45021-8c2e-491f-9376-7b0e5a584f48")
 		)
@@ -17830,6 +18681,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 160.02 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 160.02 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 160.02 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4885c582-1749-411a-b733-60e42c87b250")
 		)
@@ -17906,6 +18784,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C23186"
+			(at 236.22 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 236.22 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAF5101T5E"
+			(at 236.22 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "cfba3a94-8192-4f9b-aca2-2564f9dc42c6")
 		)
@@ -17916,71 +18821,6 @@
 			(project "MCU"
 				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
 					(reference "R5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 220.98 50.8 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "63581ba5-a264-49d4-8f9a-3751362143c1")
-		(property "Reference" "#PWR09"
-			(at 220.98 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+VDD_SPI"
-			(at 220.98 46.99 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 220.98 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 220.98 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 220.98 50.8 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "642557fb-defe-41ce-98de-104e94aad0a7")
-		)
-		(instances
-			(project "0_HaLow"
-				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
-					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -18109,6 +18949,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" ""
+			(at 323.85 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 323.85 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
+			(at 323.85 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "499121ef-f13c-4ebf-967f-f97ba1f189c6")
 		)
@@ -18169,6 +19036,33 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x03, script generated"
+			(at 154.94 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C144394"
+			(at 154.94 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "JST"
+			(at 154.94 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "B3B-XH-A(LF)(SN)"
 			(at 154.94 114.3 0)
 			(effects
 				(font
@@ -18307,6 +19201,33 @@
 			)
 		)
 		(property "Description" "3-in-1 sensor, humidity, pressure, temperature, I2C and SPI interface, 1.71-3.6V, LGA-8"
+			(at 193.04 233.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C92489"
+			(at 193.04 233.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Bosch"
+			(at 193.04 233.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "BME280"
 			(at 193.04 233.68 0)
 			(effects
 				(font
@@ -18543,6 +19464,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C2889392"
+			(at 157.48 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 157.48 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
+			(at 157.48 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "bea1f9bd-d06b-40c1-ad16-be4c45df2be4")
 		)
@@ -18577,7 +19525,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "ESP32-S3R16V"
+		(property "Value" "ESP32-S3R8"
 			(at 306.9433 132.08 0)
 			(effects
 				(font
@@ -18586,7 +19534,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Core_System_2026:ESP32-S3R16V"
+		(property "Footprint" "Core_System_2026:ESP32-S3R8"
 			(at 304.8 139.7 0)
 			(effects
 				(font
@@ -18605,6 +19553,33 @@
 			)
 		)
 		(property "Description" "Microcontroller, Wi-Fi 802.11b/g/n, Bluetooth, 32bit"
+			(at 304.8 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2913194"
+			(at 304.8 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "ESPRESSIF"
+			(at 304.8 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "ESP32-S3R8"
 			(at 304.8 91.44 0)
 			(effects
 				(font
@@ -18915,6 +19890,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C93216"
+			(at 176.53 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Bosch"
+			(at 176.53 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "BNO055"
+			(at 176.53 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "28"
 			(uuid "2159fdf9-430b-45d1-947a-50ef67fd5b4f")
 		)
@@ -19075,73 +20077,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 325.12 41.91 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "79c1b4ba-e64c-494d-8826-b5b85859df9c")
-		(property "Reference" "#FLG03"
-			(at 327.025 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 330.2 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 325.12 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 325.12 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Special symbol for telling ERC where power comes from"
-			(at 325.12 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d82ac6c1-f2c7-4d01-b760-db5f3f4bcedd")
-		)
-		(instances
-			(project "MCU"
-				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
-					(reference "#FLG03")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:GNDREF")
 		(at 328.93 189.23 0)
 		(unit 1)
@@ -19262,6 +20197,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C221930"
+			(at 67.31 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "C&K"
+			(at 67.31 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "RS-282G05A3-SMRT"
+			(at 67.31 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "8a0a10c7-7da2-45f7-83e1-7c22316fe089")
 		)
@@ -19306,7 +20268,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Fiducial:Fiducial_Cross_1.5mm_Mask2mm"
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask3mm"
 			(at 337.82 205.74 0)
 			(effects
 				(font
@@ -19325,6 +20287,33 @@
 			)
 		)
 		(property "Description" "Fiducial Marker"
+			(at 337.82 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 337.82 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 337.82 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 337.82 205.74 0)
 			(effects
 				(font
@@ -19597,6 +20586,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 158.75 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 158.75 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 158.75 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "40eb241a-d755-4d79-8c8a-03226e896f30")
 		)
@@ -19693,6 +20709,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C326840"
+			(at 201.93 184.15 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 201.93 184.15 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603FRNPO9BN220"
+			(at 201.93 184.15 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0ada3406-afcf-49ce-966e-ce32eb9ede92")
 		)
@@ -19756,6 +20799,33 @@
 			)
 		)
 		(property "Description" "Mounting Hole with connection"
+			(at 334.01 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 334.01 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 334.01 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 334.01 182.88 0)
 			(effects
 				(font
@@ -20031,6 +21101,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 38.1 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 38.1 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 38.1 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b46a3a55-cfdc-43ed-9f4d-fda14a839f73")
 		)
@@ -20093,6 +21190,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 111.76 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 111.76 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 111.76 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 111.76 134.62 0)
 			(effects
 				(font
@@ -20177,6 +21301,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C23186"
+			(at 241.3 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 241.3 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAF5101T5E"
+			(at 241.3 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0772684c-2d17-42a1-857c-d1bb6e47835f")
 		)
@@ -20187,6 +21338,71 @@
 			(project "MCU"
 				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
 					(reference "R6")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+3V3")
+		(at 325.12 41.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "903542b3-ee94-4248-aa6a-a581dc2e523a")
+		(property "Reference" "#PWR09"
+			(at 325.12 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3V3"
+			(at 321.31 40.132 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 325.12 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 325.12 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"+3V3\""
+			(at 325.12 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2ce749c9-e94d-4c17-904c-87a370eaa9ac")
+		)
+		(instances
+			(project "MCU"
+				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
+					(reference "#PWR09")
 					(unit 1)
 				)
 			)
@@ -20239,6 +21455,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 307.34 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 307.34 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 307.34 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 307.34 31.75 0)
 			(effects
 				(font
@@ -20306,6 +21549,33 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 99.06 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C23186"
+			(at 99.06 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 99.06 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAF5101T5E"
 			(at 99.06 124.46 0)
 			(effects
 				(font
@@ -20448,6 +21718,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 29.21 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 29.21 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 29.21 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "c2bcb75d-828a-4b81-adc7-7f482c855ea4")
 		)
@@ -20509,6 +21806,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 46.99 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 46.99 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 46.99 191.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 46.99 191.77 0)
 			(effects
 				(font
@@ -20652,6 +21976,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C70158"
+			(at 39.37 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TECHFUSE"
+			(at 39.37 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "SL0805200"
+			(at 39.37 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "923f7657-5753-49b7-9636-da924db10f29")
 		)
@@ -20745,6 +22096,33 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 199.39 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 199.39 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 199.39 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 				(hide yes)
 			)
 		)
@@ -20891,6 +22269,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C19171391"
+			(at 127 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YONGYUTAI"
+			(at 127 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "YLED0805R"
+			(at 127 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8638ba1f-8878-4c96-b3cd-37b2252ad3c1")
 		)
@@ -20901,71 +22306,6 @@
 			(project "MCU"
 				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
 					(reference "LED2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 325.12 41.91 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a17f6a7e-3a87-4409-b991-46b61243faf3")
-		(property "Reference" "#PWR05"
-			(at 325.12 45.72 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+VDD_SPI"
-			(at 325.12 38.1 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 325.12 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 325.12 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 325.12 41.91 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "76955f93-94d5-4e43-a74d-b329254b8aa9")
-		)
-		(instances
-			(project "0_HaLow"
-				(path "/6c5eb290-7d16-4623-8042-ad442bc9f2a7"
-					(reference "#PWR05")
 					(unit 1)
 				)
 			)
@@ -21092,6 +22432,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C2168725"
+			(at 80.01 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "KEMET"
+			(at 80.01 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "C0603C103K8RACTU"
+			(at 80.01 224.79 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "302cbd7d-9925-4dc8-9c73-a21b635f4de5")
 		)
@@ -21152,6 +22519,33 @@
 			)
 		)
 		(property "Description" "Generic connector, double row, 02x20, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 257.81 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2884029"
+			(at 257.81 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "XKB Connection"
+			(at 257.81 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "X6521WVS-2x20H-C60D74"
 			(at 257.81 199.39 0)
 			(effects
 				(font
@@ -21318,7 +22712,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Fiducial:Fiducial_Cross_1.5mm_Mask2mm"
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask3mm"
 			(at 318.77 205.74 0)
 			(effects
 				(font
@@ -21337,6 +22731,33 @@
 			)
 		)
 		(property "Description" "Fiducial Marker"
+			(at 318.77 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 318.77 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 318.77 205.74 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 318.77 205.74 0)
 			(effects
 				(font
@@ -21383,7 +22804,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Fiducial:Fiducial_Cross_1.5mm_Mask2mm"
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask3mm"
 			(at 328.93 213.36 0)
 			(effects
 				(font
@@ -21402,6 +22823,33 @@
 			)
 		)
 		(property "Description" "Fiducial Marker"
+			(at 328.93 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 328.93 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 328.93 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 328.93 213.36 0)
 			(effects
 				(font
@@ -21614,6 +23062,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C2889392"
+			(at 123.19 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 123.19 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
+			(at 123.19 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "20b007ce-bc78-427e-a013-745f077cb932")
 		)
@@ -21750,6 +23225,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 275.59 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 275.59 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 275.59 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "aeb43e3d-fd6b-4d8d-a8a7-0a15a7671791")
 		)
@@ -21818,6 +23320,33 @@
 			)
 		)
 		(property "Field5" ""
+			(at 134.62 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C25585"
+			(at 134.62 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 134.62 104.14 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAJ0102T5E"
 			(at 134.62 104.14 90)
 			(effects
 				(font
@@ -22028,6 +23557,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C19702"
+			(at 347.98 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 347.98 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A106KP8NNNC"
+			(at 347.98 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "092f559f-c9a4-41d2-8897-05f49378c307")
 		)
@@ -22100,6 +23656,33 @@
 		)
 		(property "PROD_ID" "XTAL-13062"
 			(at 207.01 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C97606"
+			(at 196.85 177.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Seiko"
+			(at 196.85 177.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "SC-32S32.768kHz20PPM12.5pF"
+			(at 196.85 177.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22274,7 +23857,7 @@
 			)
 		)
 		(property "Value" "10R/1%"
-			(at 83.312 203.454 0)
+			(at 86.106 203.454 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22310,6 +23893,33 @@
 		)
 		(property "Field5" ""
 			(at 80.01 203.2 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C22859"
+			(at 80.01 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 80.01 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAF100JT5E"
+			(at 80.01 203.2 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -22451,6 +24061,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C5265852"
+			(at 259.08 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Huiyuan crystal"
+			(at 259.08 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "HY40MSMD2520GA1R30"
+			(at 259.08 121.92 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "4430ad9a-3e9c-4d3d-aa66-2d4c120c50fb")
 		)
@@ -22519,6 +24156,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 334.01 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C1592"
+			(at 334.01 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 334.01 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A105KO8NNNC"
 			(at 334.01 31.75 0)
 			(effects
 				(font
@@ -22903,7 +24567,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Fiducial:Fiducial_Cross_1.5mm_Mask2mm"
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask3mm"
 			(at 337.82 213.36 0)
 			(effects
 				(font
@@ -22922,6 +24586,33 @@
 			)
 		)
 		(property "Description" "Fiducial Marker"
+			(at 337.82 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 337.82 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 337.82 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 337.82 213.36 0)
 			(effects
 				(font
@@ -22985,6 +24676,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 248.92 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C326840"
+			(at 248.92 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 248.92 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603FRNPO9BN220"
 			(at 248.92 125.73 0)
 			(effects
 				(font
@@ -23152,6 +24870,33 @@
 					(size 1.27 1.27)
 				)
 				(justify right)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C326840"
+			(at 201.93 171.45 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 201.93 171.45 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603FRNPO9BN220"
+			(at 201.93 171.45 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
 				(hide yes)
 			)
 		)
@@ -23355,6 +25100,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C6952604"
+			(at 113.03 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Nexperia"
+			(at 113.03 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "PMEG2010ER-QX"
+			(at 113.03 50.8 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "a7ee25b1-57cf-4305-912d-2fb481b1f1da")
 		)
@@ -23416,6 +25188,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 177.8 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 177.8 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 177.8 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 177.8 218.44 0)
 			(effects
 				(font
@@ -23558,6 +25357,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C23186"
+			(at 67.31 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "UNI-ROYAL"
+			(at 67.31 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603WAF5101T5E"
+			(at 67.31 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "89eda471-e1f3-48f9-bf9a-2aae20f855c8")
 		)
@@ -23619,6 +25445,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 285.75 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 285.75 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 285.75 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 285.75 49.53 0)
 			(effects
 				(font
@@ -23689,6 +25542,33 @@
 			)
 		)
 		(property "Description" "GNSS Module NEO M8, VCC 2.7V to 3.6V"
+			(at 57.15 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C6330769"
+			(at 57.15 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "U-BLOX"
+			(at 57.15 219.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "NEO-M8N-0"
 			(at 57.15 219.71 0)
 			(effects
 				(font
@@ -23832,6 +25712,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 207.01 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 207.01 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 207.01 218.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "55659d4a-20a8-4386-9015-a6bfc62dfefa")
 		)
@@ -23958,6 +25865,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 251.46 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C26413"
+			(at 251.46 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 251.46 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A105KP8NNNC"
 			(at 251.46 49.53 0)
 			(effects
 				(font
@@ -24095,6 +26029,33 @@
 			)
 		)
 		(property "Description" "Accelerometer, Gyroscope, 6-Axis Sensor, I2C / SPI interface, LGA-16"
+			(at 140.97 232.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C194919"
+			(at 140.97 232.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Bosch"
+			(at 140.97 232.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "BMI088"
 			(at 140.97 232.41 0)
 			(effects
 				(font
@@ -24416,6 +26377,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C111566"
+			(at 85.09 49.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "onsemi"
+			(at 85.09 49.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "ESD9B5.0ST5G"
+			(at 85.09 49.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "41c56a16-ffb3-4310-a60c-f18177a94db2")
 		)
@@ -24478,6 +26466,33 @@
 		)
 		(property "Description" "Push button switch, generic, two pins"
 			(at 99.06 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C221930"
+			(at 99.06 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "C&K"
+			(at 99.06 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "RS-282G05A3-SMRT"
+			(at 99.06 134.62 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -24622,6 +26637,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 322.58 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 322.58 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 322.58 31.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8c592a1a-f0f5-4d71-bf76-d1606f6b03e6")
 		)
@@ -24698,6 +26740,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C2889392"
+			(at 158.75 166.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "VO"
+			(at 158.75 166.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "0603 ±5% 10K"
+			(at 158.75 166.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d96e9fc8-be6f-4c07-bfee-107418f2a8c7")
 		)
@@ -24757,6 +26826,33 @@
 			)
 		)
 		(property "Description" "DC Barrel Jack with a mounting pin"
+			(at 58.42 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C7498153"
+			(at 58.42 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Lian Xin Technology"
+			(at 58.42 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "XDJK-0051-025"
 			(at 58.42 66.04 0)
 			(effects
 				(font
@@ -24832,6 +26928,33 @@
 			)
 		)
 		(property "Description" "Very low capacitance ESD protection diode, 2 data-line, SOT-23-6"
+			(at 245.11 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C2827654"
+			(at 245.11 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "TECH PUBLIC"
+			(at 245.11 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "USBLC6-2SC6"
 			(at 245.11 104.14 0)
 			(effects
 				(font
@@ -24922,6 +27045,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C326840"
+			(at 266.7 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 266.7 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603FRNPO9BN220"
+			(at 266.7 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "5aec72fd-5680-4e7e-b522-5f03bef55d6c")
 		)
@@ -24983,6 +27133,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 148.59 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C19702"
+			(at 148.59 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Samsung Electro-Mechanics"
+			(at 148.59 67.31 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CL10A106KP8NNNC"
 			(at 148.59 67.31 0)
 			(effects
 				(font
@@ -25120,6 +27297,33 @@
 		)
 		(property "Description" "Push button switch, generic, two pins"
 			(at 36.83 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C221930"
+			(at 36.83 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "C&K"
+			(at 36.83 134.62 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "RS-282G05A3-SMRT"
+			(at 36.83 134.62 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -25326,6 +27530,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C7498153"
+			(at 151.13 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "Lian Xin Technology"
+			(at 151.13 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "XDJK-0051-025"
+			(at 151.13 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e4767c0d-c770-44fa-958e-221e974475f6")
 		)
@@ -25398,6 +27629,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C14663"
+			(at 314.96 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 314.96 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
+			(at 314.96 45.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "1fd12b69-1bee-46ef-b65d-ce9fdcc992a2")
 		)
@@ -25460,6 +27718,33 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 80.01 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" "C14663"
+			(at 80.01 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "YAGEO"
+			(at 80.01 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "CC0603KRX7R9BB104"
 			(at 80.01 134.62 0)
 			(effects
 				(font
@@ -25603,6 +27888,33 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC" "C139271"
+			(at 270.51 119.38 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" "FH"
+			(at 270.51 119.38 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" "VHF160808H24NJT"
+			(at 270.51 119.38 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "4a1d0d0a-60e5-4c64-bdac-b55b436e02b0")
 		)
@@ -25647,7 +27959,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "Fiducial:Fiducial_Cross_1.5mm_Mask2mm"
+		(property "Footprint" "Fiducial:Fiducial_1mm_Mask3mm"
 			(at 318.77 213.36 0)
 			(effects
 				(font
@@ -25666,6 +27978,33 @@
 			)
 		)
 		(property "Description" "Fiducial Marker"
+			(at 318.77 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC" ""
+			(at 318.77 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer" ""
+			(at 318.77 213.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Manufacturer Part Number" ""
 			(at 318.77 213.36 0)
 			(effects
 				(font
