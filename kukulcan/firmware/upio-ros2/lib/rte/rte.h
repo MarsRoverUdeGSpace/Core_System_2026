@@ -2,7 +2,7 @@
 
 /**
  * @file rte.h
- * @brief micro-ROS runtime environment interface.
+ * @brief Micro-ROS runtime environment interface.
  */
 
 #include <Arduino.h>
@@ -37,12 +37,11 @@ typedef struct MicroRosStateTag
 } MicroRosState;
 
 /**
- * @brief Initialize micro-ROS runtime environment.
+ * @brief Initialize the Micro-ROS runtime environment.
  */
 void rte_Init(void);
 
 /**
- * @brief Execute one micro-ROS step (publish + spin).
+ * @brief Execute one Micro-ROS step (publish + spin).
  */
 void rte_Run(void);
-

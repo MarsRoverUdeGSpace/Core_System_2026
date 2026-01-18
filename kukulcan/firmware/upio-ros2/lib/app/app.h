@@ -18,7 +18,6 @@ void app_StartTasks(void);
 /**
  * @brief Execute one application step.
  *
- * @note Intended to be called from the micro-ROS task.
+ * @note Intended to be called from the Micro-ROS task.
  */
 void app_Run(void);
-

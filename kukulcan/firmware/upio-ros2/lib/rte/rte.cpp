@@ -1,54 +1,77 @@
 /**
  * @file rte.cpp
- * @brief micro-ROS runtime environment implementation.
+ * @brief Micro-ROS runtime environment implementation.
  */
-
-#include "rte.h"
 #include "config.h"
+#include "rte.h"
 
-#include <std_msgs/msg/string.h>
 #include <stdio.h>
 #include <string.h>
 
+#include <geometry_msgs/msg/twist.h>
+#include <std_msgs/msg/string.h>
+
+
 static constexpr const char * RTE_NODE           = "kukulcan";
 static constexpr const char * RTE_TOPIC_PUB      = "app_hello";
-static constexpr const char * RTE_TOPIC_SUB      = "app_in";
+static constexpr const char * RTE_TOPIC_SUB      = "cmd_vel";
+
 static constexpr uint32_t     RTE_SPIN_PERIOD_MS = 10U;
 
-/* Internal state */
+/* RTE state for node, executor, and entities. */
 static MicroRosState rte_state;
 
-/* Publisher state */
+/* Publisher state for app_hello. */
 static std_msgs__msg__String rte_pub_msg;
 static char                  rte_pub_buffer[32];
 static uint32_t              rte_counter = 0U;
 
-/* Subscriber state */
-static std_msgs__msg__String rte_sub_msg;
-static char                  rte_sub_buffer[64];
+/* Subscriber state for cmd_vel. */
+static geometry_msgs__msg__Twist rte_sub_msg;
+/* Count dropped cmd_vel messages (queue full). */
+static volatile uint32_t rte_cmd_vel_drop_count = 0U;
 
 /**
- * @brief Subscriber callback for "app_in" topic.
+ * @brief Subscriber callback for the "cmd_vel" topic.
  *
- * @param msgin Pointer to received message.
+ * @param msgin Incoming Twist message.
  */
 static void rte_sub_callback(const void * msgin)
 {
-  const std_msgs__msg__String * msg =
-      static_cast<const std_msgs__msg__String *>(msgin);
+  const geometry_msgs__msg__Twist * msg =
+  static_cast<const geometry_msgs__msg__Twist *>(msgin);
 
-  Serial.print("[RTE] app_in: ");
-  Serial.write(msg->data.data, msg->data.size);
-  Serial.println();
+  if (xcmd_velQueue == NULL)
+  {
+    return;
+  }
+
+  cmd_velQueueMsg_t queue_msg;
+  queue_msg.linear_x = msg->linear.x;
+  queue_msg.angular_z = msg->angular.z;
+
+  if (xQueueSend(xcmd_velQueue, &queue_msg, 0) != pdTRUE)
+  {
+    /* Queue full; track drops for telemetry/diagnostics. */
+    rte_cmd_vel_drop_count++;
+  }
 }
 
 /**
- * @brief Initialize serial transport, allocator, support, node, entities, and executor.
+ * @brief Initialize transport, allocator, node, entities, and executor.
  */
 void rte_Init(void)
 {
   config_init();
-  set_microros_serial_transports(rte_serial);
+  if (RTE_USE_USB_CDC)
+  {
+    set_microros_serial_transports(Serial);
+  }
+  else
+  {
+    set_microros_serial_transports(rte_serial);
+  }
+  /* Allow transport to settle before creating ROS entities. */
   delay(2000U);
 
   rte_state.allocator = rcl_get_default_allocator();
@@ -64,6 +87,8 @@ void rte_Init(void)
       RTE_NODE,
       "",
       &rte_state.support));
+  
+  /* --- PUBLISHERS --- */
 
   /* Publisher: "app_hello" */
   RCCHECK(rclc_publisher_init_default(
@@ -72,22 +97,22 @@ void rte_Init(void)
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
       RTE_TOPIC_PUB));
 
+  /* Bind message buffer to the outgoing String message. */
   rte_pub_msg.data.data     = rte_pub_buffer;
   rte_pub_msg.data.size     = 0U;
   rte_pub_msg.data.capacity = sizeof(rte_pub_buffer);
 
-  /* Subscriber: "app_in" */
+   /* ------SUBSCRIBERS-------- */
+
+  // Subscriber: cmd_vel (Twist).
   RCCHECK(rclc_subscription_init_default(
       &rte_state.subs,
       &rte_state.node,
-      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
+      ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist),
       RTE_TOPIC_SUB));
 
-  rte_sub_msg.data.data     = rte_sub_buffer;
-  rte_sub_msg.data.size     = 0U;
-  rte_sub_msg.data.capacity = sizeof(rte_sub_buffer);
+   /* ------- EXECUTOR----------- */
 
-  /* Executor with one handle (subscriber) */
   RCCHECK(rclc_executor_init(
       &rte_state.executor,
       &rte_state.support.context,
@@ -100,10 +125,12 @@ void rte_Init(void)
       &rte_sub_msg,
       &rte_sub_callback,
       ON_NEW_DATA));
+
 }
 
+
 /**
- * @brief Publish "Hello N" and spin executor.
+ * @brief Publish "Hello N" and spin the executor.
  */
 void rte_Run(void)
 {
@@ -138,4 +165,3 @@ void rte_Run(void)
       &rte_state.executor,
       RCL_MS_TO_NS(RTE_SPIN_PERIOD_MS)));
 }
-

@@ -3,7 +3,6 @@
  * @brief Arduino entry point for upio-ros2 firmware.
  */
 
-#include <Arduino.h>
 #include "app.h"
 
 /**
@@ -16,7 +15,6 @@ void setup(void)
 }
 
 /**
- * @brief Idle loop; work is done in FreeRTOS tasks.
+ * @brief Idle loop; work is handled by FreeRTOS tasks.
  */
 void loop(void){}
-
