@@ -28,8 +28,6 @@ static uint32_t              rte_counter = 0U;
 
 /* Subscriber state for cmd_vel. */
 static geometry_msgs__msg__Twist rte_sub_msg;
-/* Count dropped cmd_vel messages (queue full). */
-static volatile uint32_t rte_cmd_vel_drop_count = 0U;
 
 /**
  * @brief Subscriber callback for the "cmd_vel" topic.
@@ -50,11 +48,7 @@ static void rte_sub_callback(const void * msgin)
   queue_msg.linear_x = msg->linear.x;
   queue_msg.angular_z = msg->angular.z;
 
-  if (xQueueSend(xcmd_velQueue, &queue_msg, 0) != pdTRUE)
-  {
-    /* Queue full; track drops for telemetry/diagnostics. */
-    rte_cmd_vel_drop_count++;
-  }
+  (void)xQueueOverwrite(xcmd_velQueue, &queue_msg);
 }
 
 /**

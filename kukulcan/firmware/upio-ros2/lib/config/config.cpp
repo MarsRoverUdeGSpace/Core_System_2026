@@ -11,6 +11,9 @@ QueueHandle_t xcmd_velQueue = NULL;
 /* Define the global serial object for RTE. */
 HardwareSerial rte_serial(RTE_UART_INSTANCE);
 
+HardwareSerial motorSerial(RBW_UART_INSTANCE);
+RoboClaw roboclaw(&motorSerial, 10000);
+
 /**
  * @brief Initialize UART used by the RTE.
  */
@@ -31,4 +34,8 @@ void config_init(void)
 
   /* Create cmd_vel queue for RTE-to-app handoff. */
   xcmd_velQueue = xQueueCreate(RTE_CMD_VEL_QUEUE_DEPTH, sizeof(cmd_velQueueMsg_t));
+
+  motorSerial.begin(RBW_UART_BAUD, RBW_UART_CONFIG, RBW_UART_RX_PIN, RBW_UART_TX_PIN);
+  roboclaw.begin(RBW_UART_BAUD);
+
 }

@@ -6,6 +6,7 @@
 #include "app.h"
 #include "rte.h"
 #include "config.h"
+#include "motors.h"
 
 /* Task periods for application tasks. */
 static const TickType_t app_task_period_ticks   = pdMS_TO_TICKS(10U);
@@ -51,7 +52,11 @@ static void app_TaskMicroRos(void * pvParameters)
 static void app_TaskMotorControl(void * pvParameters)
 {
   (void)pvParameters;
-  
+
+  const TickType_t cmd_vel_timeout_ticks = pdMS_TO_TICKS(250U);
+  TickType_t last_cmd_tick = xTaskGetTickCount();
+  bool       have_cmd = false;
+
   for (;;)
   {
     cmd_velQueueMsg_t receivedMsg;
@@ -59,7 +64,17 @@ static void app_TaskMotorControl(void * pvParameters)
     if (xcmd_velQueue != NULL &&
         xQueueReceive(xcmd_velQueue, &receivedMsg, 0) == pdTRUE)
     {
-      // Apply the received velocity command to motors.
+      have_cmd = true;
+      last_cmd_tick = xTaskGetTickCount();
+      Hal_Motor_SetTwist(receivedMsg.linear_x, receivedMsg.angular_z);
+    }
+    else
+    {
+      const TickType_t now = xTaskGetTickCount();
+      if ((have_cmd == false) || ((now - last_cmd_tick) > cmd_vel_timeout_ticks))
+      {
+        Hal_Motor_SetTwist(0.0F, 0.0F);
+      }
     }
     vTaskDelay(motortask_period_ticks);
   }
