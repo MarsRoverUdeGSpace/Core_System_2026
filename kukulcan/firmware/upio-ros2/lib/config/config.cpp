@@ -13,6 +13,9 @@ HardwareSerial rte_serial(RTE_UART_INSTANCE);
 
 HardwareSerial motorSerial(RBW_UART_INSTANCE);
 RoboClaw roboclaw(&motorSerial, 10000);
+TwoWire &i2c_bus = Wire;
+Adafruit_BME280 bme280;
+bool bme280_ready = false;
 
 /**
  * @brief Initialize UART used by the RTE.
@@ -38,4 +41,7 @@ void config_init(void)
   motorSerial.begin(RBW_UART_BAUD, RBW_UART_CONFIG, RBW_UART_RX_PIN, RBW_UART_TX_PIN);
   roboclaw.begin(RBW_UART_BAUD);
 
+  i2c_bus.begin(I2C_SDA_PIN, I2C_SCL_PIN);
+  i2c_bus.setClock(I2C_CLOCK_HZ);
+  bme280_ready = bme280.begin(BME280_I2C_ADDR, &i2c_bus);
 }

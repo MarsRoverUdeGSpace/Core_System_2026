@@ -4,27 +4,36 @@
  */
 #include "config.h"
 #include "rte.h"
+#include "alt.h"
 
 #include <stdio.h>
-#include <string.h>
 
 #include <geometry_msgs/msg/twist.h>
-#include <std_msgs/msg/string.h>
+#include <sensor_msgs/msg/temperature.h>
+#include <sensor_msgs/msg/fluid_pressure.h>
+#include <sensor_msgs/msg/relative_humidity.h>
 
 
 static constexpr const char * RTE_NODE           = "kukulcan";
-static constexpr const char * RTE_TOPIC_PUB      = "app_hello";
+static constexpr const char * RTE_TOPIC_TEMP     = "sensors/bme280/temperature";
+static constexpr const char * RTE_TOPIC_PRESS    = "sensors/bme280/pressure";
+static constexpr const char * RTE_TOPIC_HUM      = "sensors/bme280/humidity";
 static constexpr const char * RTE_TOPIC_SUB      = "cmd_vel";
 
 static constexpr uint32_t     RTE_SPIN_PERIOD_MS = 10U;
+static constexpr TickType_t   RTE_BME_PUB_PERIOD_TICKS = pdMS_TO_TICKS(1000U);
 
 /* RTE state for node, executor, and entities. */
 static MicroRosState rte_state;
 
-/* Publisher state for app_hello. */
-static std_msgs__msg__String rte_pub_msg;
-static char                  rte_pub_buffer[32];
-static uint32_t              rte_counter = 0U;
+/* Publisher state for BME280. */
+static rcl_publisher_t rte_pub_temp;
+static rcl_publisher_t rte_pub_press;
+static rcl_publisher_t rte_pub_hum;
+
+static sensor_msgs__msg__Temperature      rte_temp_msg;
+static sensor_msgs__msg__FluidPressure    rte_press_msg;
+static sensor_msgs__msg__RelativeHumidity rte_hum_msg;
 
 /* Subscriber state for cmd_vel. */
 static geometry_msgs__msg__Twist rte_sub_msg;
@@ -84,17 +93,23 @@ void rte_Init(void)
   
   /* --- PUBLISHERS --- */
 
-  /* Publisher: "app_hello" */
   RCCHECK(rclc_publisher_init_default(
-      &rte_state.publis,
+      &rte_pub_temp,
       &rte_state.node,
-      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-      RTE_TOPIC_PUB));
+      ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Temperature),
+      RTE_TOPIC_TEMP));
 
-  /* Bind message buffer to the outgoing String message. */
-  rte_pub_msg.data.data     = rte_pub_buffer;
-  rte_pub_msg.data.size     = 0U;
-  rte_pub_msg.data.capacity = sizeof(rte_pub_buffer);
+  RCCHECK(rclc_publisher_init_default(
+      &rte_pub_press,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, FluidPressure),
+      RTE_TOPIC_PRESS));
+
+  RCCHECK(rclc_publisher_init_default(
+      &rte_pub_hum,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, RelativeHumidity),
+      RTE_TOPIC_HUM));
 
    /* ------SUBSCRIBERS-------- */
 
@@ -124,36 +139,48 @@ void rte_Init(void)
 
 
 /**
- * @brief Publish "Hello N" and spin the executor.
+ * @brief Publish Topics and spin the executor.
  */
 void rte_Run(void)
 {
-  int    written;
-  size_t len;
+  static TickType_t last_bme_pub_tick = 0U;
+  const TickType_t now_tick = xTaskGetTickCount();
 
-  written = snprintf(
-      rte_pub_buffer,
-      sizeof(rte_pub_buffer),
-      "Hello %lu",
-      static_cast<unsigned long>(rte_counter));
-
-  if (written > 0)
+  if ((now_tick - last_bme_pub_tick) >= RTE_BME_PUB_PERIOD_TICKS)
   {
-    len = static_cast<size_t>(written);
-    if (len >= sizeof(rte_pub_buffer))
+    float temp_c = 0.0F;
+    float press_pa = 0.0F;
+    float hum_pct = 0.0F;
+
+    last_bme_pub_tick = now_tick;
+
+    if (Hal_Alt_Read(&temp_c, &press_pa, &hum_pct))
     {
-      len = sizeof(rte_pub_buffer) - 1U;
-      rte_pub_buffer[len] = '\0';
+      rte_temp_msg.temperature = temp_c;
+      rte_temp_msg.variance = 0.0F;
+
+      rte_press_msg.fluid_pressure = press_pa;
+      rte_press_msg.variance = 0.0F;
+
+      rte_hum_msg.relative_humidity = hum_pct / 100.0F;
+      rte_hum_msg.variance = 0.0F;
+
+      RCCHECK(rcl_publish(
+          &rte_pub_temp,
+          &rte_temp_msg,
+          NULL));
+
+      RCCHECK(rcl_publish(
+          &rte_pub_press,
+          &rte_press_msg,
+          NULL));
+
+      RCCHECK(rcl_publish(
+          &rte_pub_hum,
+          &rte_hum_msg,
+          NULL));
     }
-    rte_pub_msg.data.size = len;
   }
-
-  RCCHECK(rcl_publish(
-      &rte_state.publis,
-      &rte_pub_msg,
-      NULL));
-
-  rte_counter++;
 
   RCCHECK(rclc_executor_spin_some(
       &rte_state.executor,
