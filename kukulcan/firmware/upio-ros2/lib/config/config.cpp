@@ -35,6 +35,11 @@ void config_init(void)
         RTE_UART_TX_PIN);
   }
 
+  pinMode(LED_RED_PIN, OUTPUT);
+  pinMode(LED_WHITE_PIN, OUTPUT);
+  digitalWrite(LED_RED_PIN, LOW);
+  digitalWrite(LED_WHITE_PIN, LOW);
+
   /* Create cmd_vel queue for RTE-to-app handoff. */
   xcmd_velQueue = xQueueCreate(RTE_CMD_VEL_QUEUE_DEPTH, sizeof(cmd_velQueueMsg_t));
 

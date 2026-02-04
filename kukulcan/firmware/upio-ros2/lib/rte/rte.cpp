@@ -165,24 +165,24 @@ void rte_Run(void)
       rte_hum_msg.relative_humidity = hum_pct / 100.0F;
       rte_hum_msg.variance = 0.0F;
 
-      RCCHECK(rcl_publish(
+      RCSOFTCHECK(rcl_publish(
           &rte_pub_temp,
           &rte_temp_msg,
           NULL));
 
-      RCCHECK(rcl_publish(
+      RCSOFTCHECK(rcl_publish(
           &rte_pub_press,
           &rte_press_msg,
           NULL));
 
-      RCCHECK(rcl_publish(
+      RCSOFTCHECK(rcl_publish(
           &rte_pub_hum,
           &rte_hum_msg,
           NULL));
     }
   }
 
-  RCCHECK(rclc_executor_spin_some(
+  RCSOFTCHECK(rclc_executor_spin_some(
       &rte_state.executor,
       RCL_MS_TO_NS(RTE_SPIN_PERIOD_MS)));
 }

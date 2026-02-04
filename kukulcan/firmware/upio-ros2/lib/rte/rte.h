@@ -6,6 +6,7 @@
  */
 
 #include <Arduino.h>
+#include "config.h"
 #include <micro_ros_platformio.h>
 #include <rcl/rcl.h>
 #include <rclc/rclc.h>
@@ -16,14 +17,28 @@
  *
  * @note This macro hides control flow.
  */
+static inline void error_loop(void)
+{
+  for (;;)
+  {
+    digitalWrite(LED_RED_PIN, !digitalRead(LED_RED_PIN));
+    delay(100U);
+  }
+}
+
 #define RCCHECK(fn)                \
   do {                             \
-    rcl_ret_t rc_ = (fn);          \
-    if (rc_ != RCL_RET_OK) {       \
-      for (;;) {                   \
-        delay(100U);               \
-      }                            \
-    }                              \
+    rcl_ret_t temp_rc = (fn);      \
+    if (temp_rc != RCL_RET_OK) {   \
+      error_loop();               \
+    }                             \
+  } while (0)
+
+#define RCSOFTCHECK(fn)            \
+  do {                             \
+    rcl_ret_t temp_rc = (fn);      \
+    if (temp_rc != RCL_RET_OK) {   \
+    }                             \
   } while (0)
 
 typedef struct MicroRosStateTag

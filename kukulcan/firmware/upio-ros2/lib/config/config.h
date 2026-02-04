@@ -35,6 +35,10 @@ static constexpr uint8_t  RBW_UART_TX_PIN = 35;
 static constexpr uint8_t  RBW_UART_INSTANCE = 1;
 static constexpr uint32_t RBW_UART_CONFIG = SERIAL_8N1;
 
+/* Status LEDs */
+static constexpr uint8_t LED_WHITE_PIN = 33U;
+static constexpr uint8_t LED_RED_PIN   = 34U;
+
 /* I2C bus (shared across sensors). */
 static constexpr uint8_t I2C_SDA_PIN = 10U;
 static constexpr uint8_t I2C_SCL_PIN = 11U;

@@ -26,6 +26,7 @@ void app_Init(void)
 void app_Run(void)
 {
   rte_Run();
+  digitalWrite(LED_WHITE_PIN, !digitalRead(LED_WHITE_PIN));
 }
 
 /**
