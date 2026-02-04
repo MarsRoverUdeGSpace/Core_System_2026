@@ -28,8 +28,8 @@ static constexpr UBaseType_t RTE_CMD_VEL_QUEUE_DEPTH = 1U;
 static constexpr uint32_t RBW_UART_BAUD = 460800UL;
 static constexpr uint8_t  ADDR_RB1 = 0x80U;
 static constexpr uint8_t  ADDR_RB2 = 0x81U;
-static constexpr uint8_t  RBW_UART_RX_PIN = 20;
-static constexpr uint8_t  RBW_UART_TX_PIN = 21;
+static constexpr uint8_t  RBW_UART_RX_PIN = 36;
+static constexpr uint8_t  RBW_UART_TX_PIN = 35;
 static constexpr uint8_t  RBW_UART_INSTANCE = 1;
 static constexpr uint32_t RBW_UART_CONFIG = SERIAL_8N1;
 

@@ -1,0 +1,61 @@
+{
+  "name": "Kukulcan ESP32-S3R8 (32MB Flash, 8MB PSRAM)",
+  "vendor": "UdeGSpace",
+  "url": "https://marsrover.mx",
+  "description": "Custom Kukulcan PCB: ESP32-S3R8 with 32MB external flash, 8MB OPI PSRAM, and native USB-Serial/JTAG (VID:PID 303A:1001).",
+  "frameworks": [
+    "arduino",
+    "espidf"
+  ],
+  "connectivity": [
+    "wifi",
+    "bluetooth"
+  ],
+  "build": {
+    "core": "esp32",
+    "mcu": "esp32s3",
+    "variant": "esp32s3",
+
+    "f_cpu": "240000000L",
+    "f_flash": "80000000L",
+    "flash_mode": "dio",
+    "psram_type": "opi",
+
+    "extra_flags": [
+      "-DARDUINO_ESP32S3_DEV",
+      "-DBOARD_HAS_PSRAM",
+      "-DARDUINO_USB_MODE=1",
+      "-DARDUINO_USB_CDC_ON_BOOT=1"
+    ],
+
+    "hwids": [
+      [
+        "0x303A",
+        "0x1001"
+      ]
+    ],
+
+    "arduino": {
+      "ldscript": "esp32s3_out.ld",
+      "partitions": "large_littlefs_32MB.csv",
+      "memory_type": "qio_opi"
+    }
+  },
+  "upload": {
+    "protocol": "esptool",
+    "require_upload_port": true,
+    "speed": 460800,
+
+    "flash_size": "32MB",
+    "maximum_size": 33554432,
+    "maximum_ram_size": 327680
+  },
+  "debug": {
+    "default_tool": "esp-builtin",
+    "onboard_tools": [
+      "esp-builtin"
+    ],
+    "openocd_target": "esp32s3.cfg"
+  }
+}
+
