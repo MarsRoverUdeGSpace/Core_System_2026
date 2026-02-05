@@ -1,6 +1,26 @@
 #pragma once
 #include "config.h"
 
+typedef struct
+{
+  float qw;
+  float qx;
+  float qy;
+  float qz;
+  float gx;
+  float gy;
+  float gz;
+  float ax;
+  float ay;
+  float az;
+  uint32_t seq;
+  bool  valid;
+} imu_data_t;
+
+void Hal_Imu_Init(void);
+void Hal_Imu_StartTask(void);
+bool Hal_Imu_GetLatest(imu_data_t * out);
+
 /**
  * @brief Read IMU data (quaternion, gyro, linear accel).
  *

@@ -7,7 +7,8 @@
 #include "rte.h"
 #include "config.h"
 #include "motors.h"
-#include "sensors.h"
+#include "imu.h"
+#include "alt.h"
 
 /* Task periods for deterministic scheduling. */
 static const TickType_t app_task_period_ticks   = pdMS_TO_TICKS(5U);
@@ -23,15 +24,8 @@ void app_Init(void)
 {
   /* Order matters: transport/config must be ready before sensors/publishers. */
   rte_Init();
-  Sensors_Init();
-}
-
-/**
- * @brief Execute one application step (delegate to the RTE).
- */
-void app_Run(void)
-{
-  rte_Run();
+  Hal_Imu_Init();
+  Hal_Alt_Init();
 }
 
 /**
@@ -76,7 +70,6 @@ static void app_TaskPublisher(void * pvParameters)
     {
       bme_wake += bme_pub_period_ticks;
       rte_PublishBme();
-      rte_PublishDebug();
     }
 
     vTaskDelayUntil(&last_wake, pub_task_period_ticks);
@@ -127,8 +120,9 @@ static void app_TaskMotorControl(void * pvParameters)
  */
 void app_StartTasks(void)
 {
-  /* Sensor task must be running before publishers. */
-  Sensors_StartTask();
+  /* Sensor tasks must be running before publishers. */
+  Hal_Imu_StartTask();
+  Hal_Alt_StartTask();
 
   (void)xTaskCreatePinnedToCore(
       app_TaskMicroRos,

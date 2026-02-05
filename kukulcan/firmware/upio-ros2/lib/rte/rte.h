@@ -59,11 +59,6 @@ typedef struct MicroRosStateTag
 void rte_Init(void);
 
 /**
- * @brief Execute one Micro-ROS step (publish + spin).
- */
-void rte_Run(void);
-
-/**
  * @brief Spin the micro-ROS executor once.
  */
 void rte_SpinOnce(void);
@@ -77,8 +72,3 @@ void rte_PublishImu(void);
  * @brief Publish latest BME sample from cache.
  */
 void rte_PublishBme(void);
-
-/**
- * @brief Publish debug counters.
- */
-void rte_PublishDebug(void);

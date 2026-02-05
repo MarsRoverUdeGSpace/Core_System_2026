@@ -21,7 +21,7 @@
   - Task B (sensors): read IMU at 50 Hz and BME at 1 Hz; write to a mutex-protected cache.
   - Task C (publishers): publish cached IMU at 50 Hz and cached BME at 1 Hz; no I2C access.
   - All `rcl_*` calls are guarded by a dedicated mutex (micro-ROS stack is not thread-safe).
-  - Executor has a 1 Hz dummy timer to keep XRCE transport serviced even without callbacks.
+  - Executor has a 1 Hz timer to keep XRCE transport serviced even without callbacks.
 
 ## Build, Test, and Development Commands
 This project uses PlatformIO.

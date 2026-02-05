@@ -1,6 +1,19 @@
 #pragma once
 #include "config.h"
 
+typedef struct
+{
+  float temp_c;
+  float press_pa;
+  float hum_pct;
+  uint32_t seq;
+  bool  valid;
+} bme_data_t;
+
+void Hal_Alt_Init(void);
+void Hal_Alt_StartTask(void);
+bool Hal_Alt_GetLatest(bme_data_t * out);
+
 /**
  * @brief Read BME280 data (temperature, pressure, humidity).
  *

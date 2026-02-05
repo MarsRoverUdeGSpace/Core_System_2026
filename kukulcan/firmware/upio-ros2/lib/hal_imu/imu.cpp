@@ -1,11 +1,100 @@
 #include "imu.h"
 
+#include <freertos/FreeRTOS.h>
+#include <freertos/semphr.h>
+#include <freertos/task.h>
 #include <utility/imumaths.h>
 
 static float dps_to_rad(float value_dps)
 {
   static constexpr float deg_to_rad = 0.01745329252F;
   return value_dps * deg_to_rad;
+}
+
+static const TickType_t imu_task_period_ticks = pdMS_TO_TICKS(20U);
+
+static imu_data_t g_imu_cache;
+static SemaphoreHandle_t g_imu_mutex = NULL;
+static TaskHandle_t g_imu_task = NULL;
+static uint32_t g_imu_seq = 0U;
+
+static void imu_Task(void * pvParameters)
+{
+  (void)pvParameters;
+  TickType_t last_wake = xTaskGetTickCount();
+
+  for (;;)
+  {
+    imu_data_t local;
+    local.valid = false;
+
+    if (Hal_Imu_Read(&local.qw, &local.qx, &local.qy, &local.qz,
+                     &local.gx, &local.gy, &local.gz,
+                     &local.ax, &local.ay, &local.az))
+    {
+      local.valid = true;
+    }
+    local.seq = ++g_imu_seq;
+
+    if (g_imu_mutex != NULL)
+    {
+      if (xSemaphoreTake(g_imu_mutex, pdMS_TO_TICKS(1U)) == pdTRUE)
+      {
+        g_imu_cache = local;
+        (void)xSemaphoreGive(g_imu_mutex);
+      }
+    }
+
+    vTaskDelayUntil(&last_wake, imu_task_period_ticks);
+  }
+}
+
+void Hal_Imu_Init(void)
+{
+  if (g_imu_mutex == NULL)
+  {
+    g_imu_mutex = xSemaphoreCreateMutex();
+  }
+  g_imu_cache.valid = false;
+  g_imu_cache.seq = 0U;
+  g_imu_seq = 0U;
+}
+
+void Hal_Imu_StartTask(void)
+{
+  if (g_imu_task != NULL)
+  {
+    return;
+  }
+
+  (void)xTaskCreatePinnedToCore(
+      imu_Task,
+      "HalImu",
+      4096U,
+      NULL,
+      2U,
+      &g_imu_task,
+      1);
+}
+
+bool Hal_Imu_GetLatest(imu_data_t * out)
+{
+  if ((out == NULL) || (g_imu_mutex == NULL))
+  {
+    return false;
+  }
+
+  bool ok = false;
+  if (xSemaphoreTake(g_imu_mutex, pdMS_TO_TICKS(1U)) == pdTRUE)
+  {
+    if (g_imu_cache.valid)
+    {
+      *out = g_imu_cache;
+      ok = true;
+    }
+    (void)xSemaphoreGive(g_imu_mutex);
+  }
+  return ok;
 }
 
 /**

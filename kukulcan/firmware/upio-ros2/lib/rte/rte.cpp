@@ -4,7 +4,8 @@
  */
 #include "config.h"
 #include "rte.h"
-#include "sensors.h"
+#include "imu.h"
+#include "alt.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +16,6 @@
 #include <sensor_msgs/msg/fluid_pressure.h>
 #include <sensor_msgs/msg/relative_humidity.h>
 #include <sensor_msgs/msg/imu.h>
-#include <std_msgs/msg/u_int32_multi_array.h>
 
 
 static constexpr const char * RTE_NODE           = "kukulcan";
@@ -23,7 +23,6 @@ static constexpr const char * RTE_TOPIC_TEMP     = "sensors/bme280/temperature";
 static constexpr const char * RTE_TOPIC_PRESS    = "sensors/bme280/pressure";
 static constexpr const char * RTE_TOPIC_HUM      = "sensors/bme280/humidity";
 static constexpr const char * RTE_TOPIC_IMU      = "imu/data";
-static constexpr const char * RTE_TOPIC_DEBUG    = "debug/microros";
 static constexpr const char * RTE_TOPIC_SUB      = "cmd_vel";
 
 /* Transport spin period is controlled by the app task (see app.cpp). */
@@ -38,16 +37,13 @@ static rcl_publisher_t rte_pub_temp;
 static rcl_publisher_t rte_pub_press;
 static rcl_publisher_t rte_pub_hum;
 static rcl_publisher_t rte_pub_imu;
-static rcl_publisher_t rte_pub_debug;
-static rcl_timer_t     rte_dummy_timer;
+static rcl_timer_t     rte_timer;
 
 static sensor_msgs__msg__Temperature      rte_temp_msg;
 static sensor_msgs__msg__FluidPressure    rte_press_msg;
 static sensor_msgs__msg__RelativeHumidity rte_hum_msg;
 static sensor_msgs__msg__Imu              rte_imu_msg;
 static char                               rte_imu_frame_id[16];
-static std_msgs__msg__UInt32MultiArray    rte_debug_msg;
-static uint32_t                           rte_debug_data[5];
 
 /* Subscriber state for cmd_vel. */
 static geometry_msgs__msg__Twist rte_sub_msg;
@@ -59,8 +55,25 @@ static uint32_t g_imu_pub_ok = 0U;
 static uint32_t g_imu_pub_miss = 0U;
 static uint32_t g_bme_pub_ok = 0U;
 static uint32_t g_bme_pub_miss = 0U;
+static TickType_t g_err_led_until = 0U;
 
-static void rte_dummy_timer_callback(rcl_timer_t * timer, int64_t last_call_time)
+static void rte_ErrorLed_Update(void)
+{
+  const TickType_t now = xTaskGetTickCount();
+  if ((g_err_led_until != 0U) && (now >= g_err_led_until))
+  {
+    digitalWrite(LED_RED_PIN, LOW);
+    g_err_led_until = 0U;
+  }
+}
+
+static void rte_ErrorLed_Pulse(void)
+{
+  digitalWrite(LED_RED_PIN, HIGH);
+  g_err_led_until = xTaskGetTickCount() + pdMS_TO_TICKS(100U);
+}
+
+static void rte_timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 {
   (void)last_call_time;
   if (timer == NULL)
@@ -158,25 +171,11 @@ void rte_Init(void)
       ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Imu),
       RTE_TOPIC_IMU));
 
-  RCCHECK(rclc_publisher_init_default(
-      &rte_pub_debug,
-      &rte_state.node,
-      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, UInt32MultiArray),
-      RTE_TOPIC_DEBUG));
-
   rte_imu_msg.header.frame_id.data = rte_imu_frame_id;
   rte_imu_msg.header.frame_id.size = 0U;
   rte_imu_msg.header.frame_id.capacity = sizeof(rte_imu_frame_id);
   (void)snprintf(rte_imu_frame_id, sizeof(rte_imu_frame_id), "imu_link");
   rte_imu_msg.header.frame_id.size = strlen(rte_imu_frame_id);
-
-  rte_debug_msg.layout.dim.data = NULL;
-  rte_debug_msg.layout.dim.size = 0U;
-  rte_debug_msg.layout.dim.capacity = 0U;
-  rte_debug_msg.layout.data_offset = 0U;
-  rte_debug_msg.data.data = rte_debug_data;
-  rte_debug_msg.data.size = 5U;
-  rte_debug_msg.data.capacity = 5U;
 
    /* ------SUBSCRIBERS-------- */
 
@@ -204,28 +203,19 @@ void rte_Init(void)
       ON_NEW_DATA));
 
   RCCHECK(rclc_timer_init_default(
-      &rte_dummy_timer,
+      &rte_timer,
       &rte_state.support,
       RCL_MS_TO_NS(1000U),
-      rte_dummy_timer_callback));
+      rte_timer_callback));
 
   RCCHECK(rclc_executor_add_timer(
       &rte_state.executor,
-      &rte_dummy_timer));
+      &rte_timer));
 
   g_ros_ready = true;
 
 }
 
-
-/**
- * @brief Publish Topics and spin the executor.
- */
-void rte_Run(void)
-{
-  rte_PublishBme();
-  rte_SpinOnce();
-}
 
 void rte_SpinOnce(void)
 {
@@ -253,21 +243,25 @@ void rte_SpinOnce(void)
 
 void rte_PublishImu(void)
 {
+  rte_ErrorLed_Update();
   static uint32_t last_seq = 0U;
   imu_data_t imu;
-  if (!Sensors_GetImu(&imu))
+  if (!Hal_Imu_GetLatest(&imu))
   {
     g_imu_pub_miss++;
+    rte_ErrorLed_Pulse();
     return;
   }
   if (imu.valid == false)
   {
     g_imu_pub_miss++;
+    rte_ErrorLed_Pulse();
     return;
   }
   if (imu.seq == last_seq)
   {
     g_imu_pub_miss++;
+    rte_ErrorLed_Pulse();
     return;
   }
   last_seq = imu.seq;
@@ -303,32 +297,38 @@ void rte_PublishImu(void)
     else
     {
       g_imu_pub_miss++;
+      rte_ErrorLed_Pulse();
     }
     (void)xSemaphoreGive(g_rcl_mutex);
   }
   else
   {
     g_imu_pub_miss++;
+    rte_ErrorLed_Pulse();
   }
 }
 
 void rte_PublishBme(void)
 {
+  rte_ErrorLed_Update();
   static uint32_t last_seq = 0U;
   bme_data_t bme;
-  if (!Sensors_GetBme(&bme))
+  if (!Hal_Alt_GetLatest(&bme))
   {
     g_bme_pub_miss++;
+    rte_ErrorLed_Pulse();
     return;
   }
   if (bme.valid == false)
   {
     g_bme_pub_miss++;
+    rte_ErrorLed_Pulse();
     return;
   }
   if (bme.seq == last_seq)
   {
     g_bme_pub_miss++;
+    rte_ErrorLed_Pulse();
     return;
   }
   last_seq = bme.seq;
@@ -353,6 +353,7 @@ void rte_PublishBme(void)
     else
     {
       g_bme_pub_miss++;
+      rte_ErrorLed_Pulse();
     }
     (void)rcl_publish(&rte_pub_press, &rte_press_msg, NULL);
     (void)rcl_publish(&rte_pub_hum, &rte_hum_msg, NULL);
@@ -361,45 +362,6 @@ void rte_PublishBme(void)
   else
   {
     g_bme_pub_miss++;
-  }
-}
-
-void rte_PublishDebug(void)
-{
-  static uint32_t last_spin = 0U;
-  static uint32_t last_imu_miss = 0U;
-  static uint32_t last_bme_miss = 0U;
-  static TickType_t err_until = 0U;
-
-  const TickType_t now = xTaskGetTickCount();
-  if ((err_until != 0U) && (now >= err_until))
-  {
-    digitalWrite(LED_RED_PIN, LOW);
-    err_until = 0U;
-  }
-
-  const uint32_t spin_rate = g_spin_count - last_spin;
-  last_spin = g_spin_count;
-
-  rte_debug_data[0] = g_imu_pub_ok;
-  rte_debug_data[1] = g_imu_pub_miss;
-  rte_debug_data[2] = g_bme_pub_ok;
-  rte_debug_data[3] = g_bme_pub_miss;
-  rte_debug_data[4] = spin_rate;
-
-  if ((g_imu_pub_miss != last_imu_miss) || (g_bme_pub_miss != last_bme_miss))
-  {
-    digitalWrite(LED_RED_PIN, HIGH);
-    err_until = now + pdMS_TO_TICKS(100U);
-  }
-  last_imu_miss = g_imu_pub_miss;
-  last_bme_miss = g_bme_pub_miss;
-
-  if ((g_rcl_mutex != NULL) &&
-      (xSemaphoreTake(g_rcl_mutex, pdMS_TO_TICKS(2U)) == pdTRUE))
-  {
-    /* Debug publishing is best-effort; avoid blocking. */
-    (void)rcl_publish(&rte_pub_debug, &rte_debug_msg, NULL);
-    (void)xSemaphoreGive(g_rcl_mutex);
+    rte_ErrorLed_Pulse();
   }
 }
