@@ -19,6 +19,8 @@
  */
 static inline void error_loop(void)
 {
+  /* Fatal error: white LED off, red LED fast-blink. */
+  digitalWrite(LED_WHITE_PIN, LOW);
   for (;;)
   {
     digitalWrite(LED_RED_PIN, !digitalRead(LED_RED_PIN));
@@ -60,3 +62,23 @@ void rte_Init(void);
  * @brief Execute one Micro-ROS step (publish + spin).
  */
 void rte_Run(void);
+
+/**
+ * @brief Spin the micro-ROS executor once.
+ */
+void rte_SpinOnce(void);
+
+/**
+ * @brief Publish latest IMU sample from cache.
+ */
+void rte_PublishImu(void);
+
+/**
+ * @brief Publish latest BME sample from cache.
+ */
+void rte_PublishBme(void);
+
+/**
+ * @brief Publish debug counters.
+ */
+void rte_PublishDebug(void);

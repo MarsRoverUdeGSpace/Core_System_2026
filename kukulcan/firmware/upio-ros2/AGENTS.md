@@ -12,10 +12,16 @@
 - Target: MCU firmware for odometry handling, aligned with AUTOSAR-style layering for microcontrollers.
 - Hardware: ESP32-S3 dual-core MCU.
 - Runtime: micro-ROS is the runtime environment (cmd_vel subscriber + app_hello publisher).
-- Concurrency: FreeRTOS kernel with two tasks pinned to different cores for parallel processing.
-- Data flow: micro-ROS `cmd_vel` -> RTE callback -> FreeRTOS queue -> motor control task, which will drive RoboClaw motor commands on the other core for real-time parallel processing.
+- Concurrency: FreeRTOS kernel with tasks pinned to cores for parallel processing.
+- Data flow: micro-ROS `cmd_vel` -> RTE callback -> FreeRTOS queue -> motor control task, which drives RoboClaw motor commands on the other core.
 - Navigation frame convention (Nav2-compatible): publish `nav_msgs/Odometry` in `odom` with `child_frame_id=base_link`, and provide the `odom -> base_link` TF from the MCU; `map -> odom` is expected from higher-level localization.
-- Sensor publishing plan (pending): publish raw encoder-based odometry, `sensor_msgs/Imu`, and `sensor_msgs/NavSatFix` separately for fusion (e.g., `robot_localization`).
+- Sensor publishing plan: publish raw encoder-based odometry, `sensor_msgs/Imu`, and `sensor_msgs/NavSatFix` separately for fusion (e.g., `robot_localization`).
+- Deterministic sensor/publish architecture:
+  - Task A (micro-ROS transport): spin executor at ~5 ms period; no sensor reads or publishing.
+  - Task B (sensors): read IMU at 50 Hz and BME at 1 Hz; write to a mutex-protected cache.
+  - Task C (publishers): publish cached IMU at 50 Hz and cached BME at 1 Hz; no I2C access.
+  - All `rcl_*` calls are guarded by a dedicated mutex (micro-ROS stack is not thread-safe).
+  - Executor has a 1 Hz dummy timer to keep XRCE transport serviced even without callbacks.
 
 ## Build, Test, and Development Commands
 This project uses PlatformIO.
