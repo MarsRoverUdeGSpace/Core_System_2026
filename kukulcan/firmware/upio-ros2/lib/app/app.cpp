@@ -24,8 +24,6 @@ void app_Init(void)
 {
   /* Order matters: transport/config must be ready before sensors/publishers. */
   rte_Init();
-  Hal_Imu_Init();
-  Hal_Alt_Init();
 }
 
 /**

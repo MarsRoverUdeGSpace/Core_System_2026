@@ -13,18 +13,31 @@
 #include <rclc/executor.h>
 
 /**
- * @brief Check micro-ROS return code and trap on error.
+ * @brief Fatal error handler: blink red LED N times, then reboot (ESP32).
  *
- * @note This macro hides control flow.
+ * @note This function never returns.
  */
 static inline void error_loop(void)
 {
-  /* Fatal error: white LED off, red LED fast-blink. */
+  /* Fatal error: white LED off, red LED blink N times, then reboot. */
   digitalWrite(LED_WHITE_PIN, LOW);
-  for (;;)
+
+  for (uint32_t i = 0U; i < 10U; ++i)
   {
+    /* Toggle red LED to indicate fatal condition. */
     digitalWrite(LED_RED_PIN, !digitalRead(LED_RED_PIN));
     delay(100U);
+  }
+
+#if defined(ARDUINO_ARCH_ESP32)
+  /* Soft reboot (ESP32 Arduino core). */
+  ESP.restart();
+#endif
+
+  /* Should never reach here; trap as a fallback. */
+  for (;;)
+  {
+    /* Intentional infinite loop */
   }
 }
 
@@ -40,6 +53,7 @@ static inline void error_loop(void)
   do {                             \
     rcl_ret_t temp_rc = (fn);      \
     if (temp_rc != RCL_RET_OK) {   \
+      /* Intentionally ignored */  \
     }                             \
   } while (0)
 
@@ -72,3 +86,4 @@ void rte_PublishImu(void);
  * @brief Publish latest BME sample from cache.
  */
 void rte_PublishBme(void);
+

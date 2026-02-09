@@ -6,10 +6,12 @@
 #include "rte.h"
 #include "imu.h"
 #include "alt.h"
+#include "motors.h"
 
 #include <stdio.h>
 #include <string.h>
 #include <freertos/semphr.h>
+#include <rmw_microros/rmw_microros.h>
 
 #include <geometry_msgs/msg/twist.h>
 #include <sensor_msgs/msg/temperature.h>
@@ -17,17 +19,15 @@
 #include <sensor_msgs/msg/relative_humidity.h>
 #include <sensor_msgs/msg/imu.h>
 
+static constexpr const char * RTE_NODE       = "kukulcan";
+static constexpr const char * RTE_TOPIC_TEMP = "sensors/bme280/temperature";
+static constexpr const char * RTE_TOPIC_PRESS = "sensors/bme280/pressure";
+static constexpr const char * RTE_TOPIC_HUM  = "sensors/bme280/humidity";
+static constexpr const char * RTE_TOPIC_IMU  = "imu/data";
+static constexpr const char * RTE_TOPIC_SUB  = "cmd_vel";
 
-static constexpr const char * RTE_NODE           = "kukulcan";
-static constexpr const char * RTE_TOPIC_TEMP     = "sensors/bme280/temperature";
-static constexpr const char * RTE_TOPIC_PRESS    = "sensors/bme280/pressure";
-static constexpr const char * RTE_TOPIC_HUM      = "sensors/bme280/humidity";
-static constexpr const char * RTE_TOPIC_IMU      = "imu/data";
-static constexpr const char * RTE_TOPIC_SUB      = "cmd_vel";
-
-/* Transport spin period is controlled by the app task (see app.cpp). */
-static constexpr uint32_t     RTE_SPIN_PERIOD_MS = 10U;
-static constexpr TickType_t   RTE_BME_PUB_PERIOD_TICKS = pdMS_TO_TICKS(1000U);
+static constexpr TickType_t RTE_PING_PERIOD_TICKS = pdMS_TO_TICKS(100U);
+static constexpr uint8_t    RTE_PING_FAIL_LIMIT = 3U;
 
 /* RTE state for node, executor, and entities. */
 static MicroRosState rte_state;
@@ -47,15 +47,26 @@ static char                               rte_imu_frame_id[16];
 
 /* Subscriber state for cmd_vel. */
 static geometry_msgs__msg__Twist rte_sub_msg;
+
 /* Guard all rcl/rmw calls; micro-ROS stack is not thread-safe. */
 static SemaphoreHandle_t g_rcl_mutex = NULL;
-static volatile bool g_ros_ready = false;
+
+static volatile bool     g_ros_ready = false;
 static volatile uint32_t g_spin_count = 0U;
+
 static uint32_t g_imu_pub_ok = 0U;
 static uint32_t g_imu_pub_miss = 0U;
 static uint32_t g_bme_pub_ok = 0U;
 static uint32_t g_bme_pub_miss = 0U;
+
 static TickType_t g_err_led_until = 0U;
+static TickType_t g_last_ping_tick = 0U;
+static uint8_t g_ping_fail_count = 0U;
+static bool g_link_down = false;
+static TickType_t g_link_blink_tick = 0U;
+
+static bool rte_MicroRos_Init(void);
+static void rte_MicroRos_Deinit(void);
 
 static void rte_ErrorLed_Update(void)
 {
@@ -71,6 +82,21 @@ static void rte_ErrorLed_Pulse(void)
 {
   digitalWrite(LED_RED_PIN, HIGH);
   g_err_led_until = xTaskGetTickCount() + pdMS_TO_TICKS(100U);
+}
+
+static void rte_LinkLed_Update(void)
+{
+  if (g_link_down == false)
+  {
+    return;
+  }
+
+  const TickType_t now = xTaskGetTickCount();
+  if ((now - g_link_blink_tick) >= pdMS_TO_TICKS(100U))
+  {
+    g_link_blink_tick = now;
+    digitalWrite(LED_RED_PIN, !digitalRead(LED_RED_PIN));
+  }
 }
 
 static void rte_timer_callback(rcl_timer_t * timer, int64_t last_call_time)
@@ -90,7 +116,7 @@ static void rte_timer_callback(rcl_timer_t * timer, int64_t last_call_time)
 static void rte_sub_callback(const void * msgin)
 {
   const geometry_msgs__msg__Twist * msg =
-  static_cast<const geometry_msgs__msg__Twist *>(msgin);
+    static_cast<const geometry_msgs__msg__Twist *>(msgin);
 
   if (xcmd_velQueue == NULL)
   {
@@ -105,11 +131,12 @@ static void rte_sub_callback(const void * msgin)
 }
 
 /**
- * @brief Initialize transport, allocator, node, entities, and executor.
+ * @brief Initialize transport and micro-ROS runtime.
  */
 void rte_Init(void)
 {
   config_init();
+
   if (RTE_USE_USB_CDC)
   {
     set_microros_serial_transports(Serial);
@@ -118,6 +145,7 @@ void rte_Init(void)
   {
     set_microros_serial_transports(rte_serial);
   }
+
   /* Allow transport to settle before creating ROS entities. */
   delay(2000U);
 
@@ -131,6 +159,11 @@ void rte_Init(void)
     }
   }
 
+  (void)rte_MicroRos_Init();
+}
+
+static bool rte_MicroRos_Init(void)
+{
   rte_state.allocator = rcl_get_default_allocator();
 
   RCCHECK(rclc_support_init(
@@ -144,7 +177,7 @@ void rte_Init(void)
       RTE_NODE,
       "",
       &rte_state.support));
-  
+
   /* --- PUBLISHERS --- */
 
   RCCHECK(rclc_publisher_init_default(
@@ -177,18 +210,17 @@ void rte_Init(void)
   (void)snprintf(rte_imu_frame_id, sizeof(rte_imu_frame_id), "imu_link");
   rte_imu_msg.header.frame_id.size = strlen(rte_imu_frame_id);
 
-   /* ------SUBSCRIBERS-------- */
+  /* ------ SUBSCRIBERS ------ */
 
-  // Subscriber: cmd_vel (Twist).
   RCCHECK(rclc_subscription_init_best_effort(
       &rte_state.subs,
       &rte_state.node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist),
       RTE_TOPIC_SUB));
 
-   /* ------- EXECUTOR----------- */
+  /* ------- EXECUTOR ------- */
 
-  /* Two handles: cmd_vel subscription + dummy timer. */
+  /* Two handles: cmd_vel subscription + 1 Hz timer. */
   RCCHECK(rclc_executor_init(
       &rte_state.executor,
       &rte_state.support.context,
@@ -213,12 +245,66 @@ void rte_Init(void)
       &rte_timer));
 
   g_ros_ready = true;
-
+  return true;
 }
 
+static void rte_MicroRos_Deinit(void)
+{
+  if (g_ros_ready == false)
+  {
+    return;
+  }
+  g_ros_ready = false;
+
+  (void)rclc_executor_fini(&rte_state.executor);
+  (void)rcl_timer_fini(&rte_timer);
+  (void)rcl_subscription_fini(&rte_state.subs, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_temp, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_press, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_hum, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_imu, &rte_state.node);
+  (void)rcl_node_fini(&rte_state.node);
+  (void)rclc_support_fini(&rte_state.support);
+}
 
 void rte_SpinOnce(void)
 {
+  const TickType_t now = xTaskGetTickCount();
+  if ((now - g_last_ping_tick) >= RTE_PING_PERIOD_TICKS)
+  {
+    g_last_ping_tick = now;
+    if (rmw_uros_ping_agent(20, 1) == RMW_RET_OK)
+    {
+      g_ping_fail_count = 0U;
+      if (g_link_down)
+      {
+        g_link_down = false;
+        digitalWrite(LED_RED_PIN, LOW);
+      }
+      if (g_ros_ready == false)
+      {
+        (void)rte_MicroRos_Init();
+      }
+    }
+    else
+    {
+      if (g_ping_fail_count < RTE_PING_FAIL_LIMIT)
+      {
+        g_ping_fail_count++;
+      }
+      if ((g_ping_fail_count >= RTE_PING_FAIL_LIMIT) && (g_ros_ready == true))
+      {
+        rte_MicroRos_Deinit();
+        Hal_Motor_SetTwist(0.0F, 0.0F);
+        g_link_down = true;
+        g_link_blink_tick = now;
+        digitalWrite(LED_WHITE_PIN, LOW);
+      }
+    }
+  }
+
+  rte_LinkLed_Update();
+
   if (g_ros_ready == false)
   {
     return;
@@ -228,9 +314,9 @@ void rte_SpinOnce(void)
       (xSemaphoreTake(g_rcl_mutex, pdMS_TO_TICKS(2U)) == pdTRUE))
   {
     /* Transport-only spin: no callbacks should block here. */
-    RCSOFTCHECK(rclc_executor_spin_some(
+    (void)rclc_executor_spin_some(
         &rte_state.executor,
-        RCL_MS_TO_NS(2U)));
+        RCL_MS_TO_NS(2U));
     (void)xSemaphoreGive(g_rcl_mutex);
   }
 
@@ -243,8 +329,13 @@ void rte_SpinOnce(void)
 
 void rte_PublishImu(void)
 {
+  if (g_ros_ready == false)
+  {
+    return;
+  }
   rte_ErrorLed_Update();
   static uint32_t last_seq = 0U;
+
   imu_data_t imu;
   if (!Hal_Imu_GetLatest(&imu))
   {
@@ -310,8 +401,13 @@ void rte_PublishImu(void)
 
 void rte_PublishBme(void)
 {
+  if (g_ros_ready == false)
+  {
+    return;
+  }
   rte_ErrorLed_Update();
   static uint32_t last_seq = 0U;
+
   bme_data_t bme;
   if (!Hal_Alt_GetLatest(&bme))
   {
@@ -355,8 +451,10 @@ void rte_PublishBme(void)
       g_bme_pub_miss++;
       rte_ErrorLed_Pulse();
     }
+
     (void)rcl_publish(&rte_pub_press, &rte_press_msg, NULL);
     (void)rcl_publish(&rte_pub_hum, &rte_hum_msg, NULL);
+
     (void)xSemaphoreGive(g_rcl_mutex);
   }
   else

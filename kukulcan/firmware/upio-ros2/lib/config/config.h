@@ -20,14 +20,14 @@
 
 /* ----------------------------- RTE transport (micro-ROS) ----------------------------- */
 
-static constexpr bool     RTE_USE_USB_CDC   = true;        /* true: USB CDC (Serial), false: UART */
+static constexpr bool     RTE_USE_USB_CDC   = false;        /* true: USB CDC (Serial), false: UART */
 static constexpr uint32_t RTE_USB_BAUD      = 921600UL;
 
 static constexpr uint8_t  RTE_UART_INSTANCE = 2U;
 static constexpr uint32_t RTE_UART_BAUD     = 921600UL;
 static constexpr uint32_t RTE_UART_CONFIG   = SERIAL_8N1;
-static constexpr uint8_t  RTE_UART_TX_PIN   = 4U;
-static constexpr uint8_t  RTE_UART_RX_PIN   = 5U;
+static constexpr uint8_t  RTE_UART_TX_PIN   = 9U;
+static constexpr uint8_t  RTE_UART_RX_PIN   = 8U;
 
 /* ----------------------------- Motor bus (RoboClaw) --------------------------------- */
 
