@@ -14547,7 +14547,7 @@
 				)
 			)
 		)
-		(property "Value" "10k/5%"
+		(property "Value" "2k2/5%"
 			(at 127.254 222.758 0)
 			(effects
 				(font
@@ -23018,7 +23018,7 @@
 				)
 			)
 		)
-		(property "Value" "10k/5%"
+		(property "Value" "2k2/5%"
 			(at 121.412 216.408 0)
 			(effects
 				(font
