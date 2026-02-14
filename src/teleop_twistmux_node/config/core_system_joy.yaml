@@ -1,0 +1,26 @@
+core_system:
+  ros__parameters:
+    joy_topic: "/joy"
+    cmd_vel_topic: "/cmd_vel"
+
+    publish_rate_hz: 20.0
+    joy_timeout_s: 0.25
+
+    # Axes: adjust if your /joy differs
+    axis_linear_x: 1
+    axis_angular_z: 0
+
+    # Deadman (must be held to move)
+    deadman_button: 5   # RB (common)
+
+    # Speed lock buttons (first pressed wins)
+    # Example: A,B,X,Y,LB,RB indices 0..5 (common on Xbox layouts)
+    speed_buttons: [0, 1, 2, 3, 4, 5]
+
+    # Presets (N entries must match speed_buttons length)
+    linear_scales:  [0.10, 0.20, 0.35, 0.50, 0.75, 1.00]
+    angular_scales: [0.25, 0.45, 0.65, 0.80, 1.00, 1.00]
+
+    # If no speed button is held, use this preset index
+    default_speed_index: 0
+

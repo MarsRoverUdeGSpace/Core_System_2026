@@ -114,6 +114,8 @@ fp-info-cache
 *.kicad_sch-bak
 *.kicad_pcb-bak
 
+*.lck
+
 ############################
 # Misc logs / dumps
 ############################

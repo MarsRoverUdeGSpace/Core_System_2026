@@ -1,0 +1,10 @@
+<launch>
+  <!-- joystick driver -->
+  <node pkg="joy_linux" exec="joy_linux_node" name="joy_linux" output="screen"/>
+
+  <!-- core teleop -->
+  <node pkg="teleop_twistmux_node" exec="core_system" name="core_system" output="screen">
+    <param from="$(find-pkg-share teleop_twistmux_node)/config/core_system_joy.yaml"/>
+  </node>
+</launch>
+
