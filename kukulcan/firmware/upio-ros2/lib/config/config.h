@@ -16,6 +16,7 @@
 #include <RoboClaw.h>
 #include <Adafruit_BME280.h>
 #include <Adafruit_BNO055.h>
+#include <Adafruit_NeoPixel.h>
 #include <Adafruit_Sensor.h>
 
 /* ----------------------------- RTE transport (micro-ROS) ----------------------------- */
@@ -55,6 +56,13 @@ static constexpr int32_t  BNO055_SENSOR_ID  = 55;
 static constexpr uint8_t LED_WHITE_PIN      = 33U;
 static constexpr uint8_t LED_RED_PIN        = 34U;
 
+/* ----------------------------- NeoPixel status strip -------------------------------- */
+
+static constexpr int16_t kNeoPixelPin = 37;
+static constexpr uint16_t kNeoPixelCount = 90U;
+static constexpr neoPixelType kNeoPixelType =
+    static_cast<neoPixelType>(NEO_GRB + NEO_KHZ800);
+
 /* ----------------------------- cmd_vel queue ---------------------------------------- */
 
 typedef struct
@@ -82,7 +90,8 @@ extern bool bme280_ready;
 extern Adafruit_BNO055 bno055;
 extern bool bno055_ready;
 
+extern Adafruit_NeoPixel status_strip;
+
 /* ----------------------------- Public API ------------------------------------------- */
 
 void config_init(void);
-

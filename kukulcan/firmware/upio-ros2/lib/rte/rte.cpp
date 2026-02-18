@@ -7,6 +7,7 @@
 #include "imu.h"
 #include "alt.h"
 #include "motors.h"
+#include "led_status.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -14,6 +15,7 @@
 #include <rmw_microros/rmw_microros.h>
 
 #include <geometry_msgs/msg/twist.h>
+#include <std_msgs/msg/u_int8.h>
 #include <sensor_msgs/msg/temperature.h>
 #include <sensor_msgs/msg/fluid_pressure.h>
 #include <sensor_msgs/msg/relative_humidity.h>
@@ -25,6 +27,7 @@ static constexpr const char * RTE_TOPIC_PRESS = "sensors/bme280/pressure";
 static constexpr const char * RTE_TOPIC_HUM  = "sensors/bme280/humidity";
 static constexpr const char * RTE_TOPIC_IMU  = "imu/data";
 static constexpr const char * RTE_TOPIC_SUB  = "cmd_vel";
+static constexpr const char * RTE_TOPIC_MODE = "mode";
 
 static constexpr TickType_t RTE_PING_PERIOD_TICKS = pdMS_TO_TICKS(100U);
 static constexpr uint8_t    RTE_PING_FAIL_LIMIT = 3U;
@@ -47,6 +50,8 @@ static char                               rte_imu_frame_id[16];
 
 /* Subscriber state for cmd_vel. */
 static geometry_msgs__msg__Twist rte_sub_msg;
+static rcl_subscription_t rte_mode_sub;
+static std_msgs__msg__UInt8 rte_mode_msg;
 
 /* Guard all rcl/rmw calls; micro-ROS stack is not thread-safe. */
 static SemaphoreHandle_t g_rcl_mutex = NULL;
@@ -128,6 +133,47 @@ static void rte_sub_callback(const void * msgin)
   queue_msg.angular_z = msg->angular.z;
 
   (void)xQueueOverwrite(xcmd_velQueue, &queue_msg);
+}
+
+/**
+ * @brief Subscriber callback for status mode control.
+ *
+ * Mode mapping:
+ * 0 teleop, 1 autonomous, 2 goal reached, 3 safe fault stop, 4 fabulous, 5 teleop arm.
+ */
+static void rte_mode_callback(const void * msgin)
+{
+  const std_msgs__msg__UInt8 * msg =
+      static_cast<const std_msgs__msg__UInt8 *>(msgin);
+  if (msg == NULL)
+  {
+    return;
+  }
+
+  switch (msg->data)
+  {
+    case 0U:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_TELEOP);
+      break;
+    case 1U:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_AUTONOMOUS);
+      break;
+    case 2U:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_GOAL_REACHED);
+      break;
+    case 3U:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_SAFE_FAULT_STOP);
+      break;
+    case 4U:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_FABULOUS);
+      break;
+    case 5U:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_TELEOP_ARM);
+      break;
+    default:
+      Hal_LedStatus_SetMode(LED_STATUS_MODE_FABULOUS);
+      break;
+  }
 }
 
 /**
@@ -218,13 +264,19 @@ static bool rte_MicroRos_Init(void)
       ROSIDL_GET_MSG_TYPE_SUPPORT(geometry_msgs, msg, Twist),
       RTE_TOPIC_SUB));
 
+  RCCHECK(rclc_subscription_init_best_effort(
+      &rte_mode_sub,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, UInt8),
+      RTE_TOPIC_MODE));
+
   /* ------- EXECUTOR ------- */
 
-  /* Two handles: cmd_vel subscription + 1 Hz timer. */
+  /* Three handles: cmd_vel subscription + mode subscription + 1 Hz timer. */
   RCCHECK(rclc_executor_init(
       &rte_state.executor,
       &rte_state.support.context,
-      2U,
+      3U,
       &rte_state.allocator));
 
   RCCHECK(rclc_executor_add_subscription(
@@ -232,6 +284,13 @@ static bool rte_MicroRos_Init(void)
       &rte_state.subs,
       &rte_sub_msg,
       &rte_sub_callback,
+      ON_NEW_DATA));
+
+  RCCHECK(rclc_executor_add_subscription(
+      &rte_state.executor,
+      &rte_mode_sub,
+      &rte_mode_msg,
+      &rte_mode_callback,
       ON_NEW_DATA));
 
   RCCHECK(rclc_timer_init_default(
@@ -259,6 +318,7 @@ static void rte_MicroRos_Deinit(void)
   (void)rclc_executor_fini(&rte_state.executor);
   (void)rcl_timer_fini(&rte_timer);
   (void)rcl_subscription_fini(&rte_state.subs, &rte_state.node);
+  (void)rcl_subscription_fini(&rte_mode_sub, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_temp, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_press, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_hum, &rte_state.node);

@@ -28,6 +28,8 @@ bool bme280_ready = false;
 Adafruit_BNO055 bno055(BNO055_SENSOR_ID, BNO055_I2C_ADDR, &i2c_bus);
 bool bno055_ready = false;
 
+Adafruit_NeoPixel status_strip(kNeoPixelCount, kNeoPixelPin, kNeoPixelType);
+
 /* ----------------------------- Local helpers ----------------------------- */
 
 /**

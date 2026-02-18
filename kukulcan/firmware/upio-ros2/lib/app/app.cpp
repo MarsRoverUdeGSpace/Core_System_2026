@@ -9,6 +9,7 @@
 #include "motors.h"
 #include "imu.h"
 #include "alt.h"
+#include "led_status.h"
 
 /* Task periods for deterministic scheduling. */
 static const TickType_t app_task_period_ticks   = pdMS_TO_TICKS(5U);
@@ -119,6 +120,7 @@ static void app_TaskMotorControl(void * pvParameters)
 void app_StartTasks(void)
 {
   /* Sensor tasks must be running before publishers. */
+  Hal_LedStatus_StartTask();
   Hal_Imu_StartTask();
   Hal_Alt_StartTask();
 
