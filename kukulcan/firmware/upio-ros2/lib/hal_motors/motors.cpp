@@ -56,19 +56,17 @@ void Hal_Motor_SetTwist(float linear_x, float angular_z)
   const bool left_forward  = (left_cmd >= 0.0F);
   const bool right_forward = (right_cmd >= 0.0F);
 
-  // M1 
+  /* RoboClaw 0x80 controls the full left side. */
   if (left_forward) roboclaw.ForwardM1(ADDR_RB1, pwm_left);
   else              roboclaw.BackwardM1(ADDR_RB1, pwm_left);
 
-  // M2
-  if (right_forward) roboclaw.ForwardM2(ADDR_RB1, pwm_right);
-  else               roboclaw.BackwardM2(ADDR_RB1, pwm_right);
+  if (left_forward) roboclaw.ForwardM2(ADDR_RB1, pwm_left);
+  else              roboclaw.BackwardM2(ADDR_RB1, pwm_left);
 
-  // M3 
-  if (left_forward) roboclaw.ForwardM1(ADDR_RB2, pwm_left);
-  else              roboclaw.BackwardM1(ADDR_RB2, pwm_left);
+  /* RoboClaw 0x81 controls the full right side. */
+  if (right_forward) roboclaw.ForwardM1(ADDR_RB2, pwm_right);
+  else               roboclaw.BackwardM1(ADDR_RB2, pwm_right);
 
-  // M4
   if (right_forward) roboclaw.ForwardM2(ADDR_RB2, pwm_right);
   else               roboclaw.BackwardM2(ADDR_RB2, pwm_right);
 }
