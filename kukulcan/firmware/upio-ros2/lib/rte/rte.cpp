@@ -6,6 +6,7 @@
 #include "rte.h"
 #include "imu.h"
 #include "alt.h"
+#include "enc.h"
 #include "motors.h"
 #include "led_status.h"
 
@@ -16,6 +17,7 @@
 
 #include <geometry_msgs/msg/twist.h>
 #include <std_msgs/msg/u_int8.h>
+#include <std_msgs/msg/int32.h>
 #include <sensor_msgs/msg/temperature.h>
 #include <sensor_msgs/msg/fluid_pressure.h>
 #include <sensor_msgs/msg/relative_humidity.h>
@@ -25,7 +27,11 @@ static constexpr const char * RTE_NODE       = "kukulcan";
 static constexpr const char * RTE_TOPIC_TEMP = "sensors/bme280/temperature";
 static constexpr const char * RTE_TOPIC_PRESS = "sensors/bme280/pressure";
 static constexpr const char * RTE_TOPIC_HUM  = "sensors/bme280/humidity";
-static constexpr const char * RTE_TOPIC_IMU  = "imu/data";
+static constexpr const char * RTE_TOPIC_IMU  = "sensros/bno055/imu/data";
+static constexpr const char * RTE_TOPIC_ENC_LEFT_TICKS  = "sensors/roboclaw/encoders/left_m1/ticks";
+static constexpr const char * RTE_TOPIC_ENC_RIGHT_TICKS = "sensors/roboclaw/encoders/right_m1/ticks";
+static constexpr const char * RTE_TOPIC_ENC_LEFT_QPPS   = "sensors/roboclaw/encoders/left_m1/qpps";
+static constexpr const char * RTE_TOPIC_ENC_RIGHT_QPPS  = "sensors/roboclaw/encoders/right_m1/qpps";
 static constexpr const char * RTE_TOPIC_SUB  = "cmd_vel";
 static constexpr const char * RTE_TOPIC_MODE = "mode";
 
@@ -40,12 +46,20 @@ static rcl_publisher_t rte_pub_temp;
 static rcl_publisher_t rte_pub_press;
 static rcl_publisher_t rte_pub_hum;
 static rcl_publisher_t rte_pub_imu;
+static rcl_publisher_t rte_pub_enc_left_ticks;
+static rcl_publisher_t rte_pub_enc_right_ticks;
+static rcl_publisher_t rte_pub_enc_left_qpps;
+static rcl_publisher_t rte_pub_enc_right_qpps;
 static rcl_timer_t     rte_timer;
 
 static sensor_msgs__msg__Temperature      rte_temp_msg;
 static sensor_msgs__msg__FluidPressure    rte_press_msg;
 static sensor_msgs__msg__RelativeHumidity rte_hum_msg;
 static sensor_msgs__msg__Imu              rte_imu_msg;
+static std_msgs__msg__Int32               rte_enc_left_ticks_msg;
+static std_msgs__msg__Int32               rte_enc_right_ticks_msg;
+static std_msgs__msg__Int32               rte_enc_left_qpps_msg;
+static std_msgs__msg__Int32               rte_enc_right_qpps_msg;
 static char                               rte_imu_frame_id[16];
 
 /* Subscriber state for cmd_vel. */
@@ -63,6 +77,8 @@ static uint32_t g_imu_pub_ok = 0U;
 static uint32_t g_imu_pub_miss = 0U;
 static uint32_t g_bme_pub_ok = 0U;
 static uint32_t g_bme_pub_miss = 0U;
+static uint32_t g_enc_pub_ok = 0U;
+static uint32_t g_enc_pub_miss = 0U;
 
 static TickType_t g_err_led_until = 0U;
 static TickType_t g_last_ping_tick = 0U;
@@ -250,6 +266,30 @@ static bool rte_MicroRos_Init(void)
       ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, Imu),
       RTE_TOPIC_IMU));
 
+  RCCHECK(rclc_publisher_init_best_effort(
+      &rte_pub_enc_left_ticks,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+      RTE_TOPIC_ENC_LEFT_TICKS));
+
+  RCCHECK(rclc_publisher_init_best_effort(
+      &rte_pub_enc_right_ticks,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+      RTE_TOPIC_ENC_RIGHT_TICKS));
+
+  RCCHECK(rclc_publisher_init_best_effort(
+      &rte_pub_enc_left_qpps,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+      RTE_TOPIC_ENC_LEFT_QPPS));
+
+  RCCHECK(rclc_publisher_init_best_effort(
+      &rte_pub_enc_right_qpps,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
+      RTE_TOPIC_ENC_RIGHT_QPPS));
+
   rte_imu_msg.header.frame_id.data = rte_imu_frame_id;
   rte_imu_msg.header.frame_id.size = 0U;
   rte_imu_msg.header.frame_id.capacity = sizeof(rte_imu_frame_id);
@@ -323,6 +363,10 @@ static void rte_MicroRos_Deinit(void)
   (void)rcl_publisher_fini(&rte_pub_press, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_hum, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_imu, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_enc_left_ticks, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_enc_right_ticks, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_enc_left_qpps, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_enc_right_qpps, &rte_state.node);
   (void)rcl_node_fini(&rte_state.node);
   (void)rclc_support_fini(&rte_state.support);
 }
@@ -455,6 +499,71 @@ void rte_PublishImu(void)
   else
   {
     g_imu_pub_miss++;
+    rte_ErrorLed_Pulse();
+  }
+}
+
+void rte_PublishEncoders(void)
+{
+  if (g_ros_ready == false)
+  {
+    return;
+  }
+  rte_ErrorLed_Update();
+  static uint32_t last_seq = 0U;
+
+  enc_data_t enc;
+  if (!Hal_Enc_GetLatest(&enc))
+  {
+    g_enc_pub_miss++;
+    rte_ErrorLed_Pulse();
+    return;
+  }
+  if (enc.valid == false)
+  {
+    g_enc_pub_miss++;
+    rte_ErrorLed_Pulse();
+    return;
+  }
+  if (enc.seq == last_seq)
+  {
+    g_enc_pub_miss++;
+    rte_ErrorLed_Pulse();
+    return;
+  }
+  last_seq = enc.seq;
+
+  rte_enc_left_ticks_msg.data = enc.left_ticks;
+  rte_enc_right_ticks_msg.data = enc.right_ticks;
+  rte_enc_left_qpps_msg.data = enc.left_qpps;
+  rte_enc_right_qpps_msg.data = enc.right_qpps;
+
+  if ((g_rcl_mutex != NULL) &&
+      (xSemaphoreTake(g_rcl_mutex, pdMS_TO_TICKS(2U)) == pdTRUE))
+  {
+    const bool left_ticks_ok =
+        (rcl_publish(&rte_pub_enc_left_ticks, &rte_enc_left_ticks_msg, NULL) == RCL_RET_OK);
+    const bool right_ticks_ok =
+        (rcl_publish(&rte_pub_enc_right_ticks, &rte_enc_right_ticks_msg, NULL) == RCL_RET_OK);
+    const bool left_qpps_ok =
+        (rcl_publish(&rte_pub_enc_left_qpps, &rte_enc_left_qpps_msg, NULL) == RCL_RET_OK);
+    const bool right_qpps_ok =
+        (rcl_publish(&rte_pub_enc_right_qpps, &rte_enc_right_qpps_msg, NULL) == RCL_RET_OK);
+
+    if (left_ticks_ok && right_ticks_ok && left_qpps_ok && right_qpps_ok)
+    {
+      g_enc_pub_ok++;
+    }
+    else
+    {
+      g_enc_pub_miss++;
+      rte_ErrorLed_Pulse();
+    }
+    (void)xSemaphoreGive(g_rcl_mutex);
+  }
+  else
+  {
+    g_enc_pub_miss++;
     rte_ErrorLed_Pulse();
   }
 }

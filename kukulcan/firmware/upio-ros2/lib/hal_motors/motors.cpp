@@ -47,6 +47,15 @@ static uint8_t to_pwm(float value)
  */
 void Hal_Motor_SetTwist(float linear_x, float angular_z)
 {
+  if (xRoboClawMutex == NULL)
+  {
+    return;
+  }
+  if (xSemaphoreTake(xRoboClawMutex, pdMS_TO_TICKS(3U)) != pdTRUE)
+  {
+    return;
+  }
+
   const float left_cmd  = apply_deadband(clamp_unit(linear_x - angular_z));
   const float right_cmd = apply_deadband(clamp_unit(linear_x + angular_z));
 
@@ -69,4 +78,6 @@ void Hal_Motor_SetTwist(float linear_x, float angular_z)
 
   if (right_forward) roboclaw.ForwardM2(ADDR_RB2, pwm_right);
   else               roboclaw.BackwardM2(ADDR_RB2, pwm_right);
+
+  (void)xSemaphoreGive(xRoboClawMutex);
 }

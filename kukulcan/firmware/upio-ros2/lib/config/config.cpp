@@ -6,11 +6,13 @@
 #include "config.h"
 #include "imu.h"
 #include "alt.h"
+#include "enc.h"
 
 /* ----------------------------- Globals (defined here, declared extern in config.h) ----------------------------- */
 
 /* Queue used to pass cmd_vel messages to the app layer. */
 QueueHandle_t xcmd_velQueue = NULL;
+SemaphoreHandle_t xRoboClawMutex = NULL;
 
 /* RTE serial (UART transport when not using USB CDC). */
 HardwareSerial rte_serial(RTE_UART_INSTANCE);
@@ -84,6 +86,14 @@ static void cmd_vel_queue_init(void)
   /* If you require fail-fast behavior, handle NULL here. */
 }
 
+static void roboclaw_mutex_init(void)
+{
+  if (xRoboClawMutex == NULL)
+  {
+    xRoboClawMutex = xSemaphoreCreateMutex();
+  }
+}
+
 /**
  * @brief Initialize the motor UART and RoboClaw driver.
  */
@@ -135,8 +145,10 @@ void config_init(void)
   rte_transport_init();
   leds_init_default_off();
   cmd_vel_queue_init();
+  roboclaw_mutex_init();
   motor_bus_init();
   sensors_i2c_init();
   Hal_Imu_Init();
   Hal_Alt_Init();
+  Hal_Enc_Init();
 }

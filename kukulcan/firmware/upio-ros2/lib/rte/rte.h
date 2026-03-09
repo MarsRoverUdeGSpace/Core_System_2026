@@ -81,9 +81,9 @@ void rte_SpinOnce(void);
  * @brief Publish latest IMU sample from cache.
  */
 void rte_PublishImu(void);
+void rte_PublishEncoders(void);
 
 /**
  * @brief Publish latest BME sample from cache.
  */
 void rte_PublishBme(void);
-

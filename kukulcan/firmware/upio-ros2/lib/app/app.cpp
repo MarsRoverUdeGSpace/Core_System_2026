@@ -7,6 +7,7 @@
 #include "rte.h"
 #include "config.h"
 #include "motors.h"
+#include "enc.h"
 #include "imu.h"
 #include "alt.h"
 #include "led_status.h"
@@ -16,6 +17,7 @@ static const TickType_t app_task_period_ticks   = pdMS_TO_TICKS(5U);
 static const TickType_t motortask_period_ticks  = pdMS_TO_TICKS(10U);
 static const TickType_t pub_task_period_ticks   = pdMS_TO_TICKS(1U);
 static const TickType_t imu_pub_period_ticks    = pdMS_TO_TICKS(20U);
+static const TickType_t enc_pub_period_ticks    = pdMS_TO_TICKS(20U);
 static const TickType_t bme_pub_period_ticks    = pdMS_TO_TICKS(1000U);
 
 /**
@@ -51,6 +53,7 @@ static void app_TaskPublisher(void * pvParameters)
 
   TickType_t last_wake = xTaskGetTickCount();
   TickType_t imu_wake = last_wake;
+  TickType_t enc_wake = last_wake;
   TickType_t bme_wake = last_wake;
 
   for (;;)
@@ -62,6 +65,12 @@ static void app_TaskPublisher(void * pvParameters)
     {
       imu_wake += imu_pub_period_ticks;
       rte_PublishImu();
+    }
+
+    if ((now - enc_wake) >= enc_pub_period_ticks)
+    {
+      enc_wake += enc_pub_period_ticks;
+      rte_PublishEncoders();
     }
 
     /* BME + debug publishers: fixed 1 Hz. */
@@ -123,6 +132,7 @@ void app_StartTasks(void)
   Hal_LedStatus_StartTask();
   Hal_Imu_StartTask();
   Hal_Alt_StartTask();
+  Hal_Enc_StartTask();
 
   (void)xTaskCreatePinnedToCore(
       app_TaskMicroRos,

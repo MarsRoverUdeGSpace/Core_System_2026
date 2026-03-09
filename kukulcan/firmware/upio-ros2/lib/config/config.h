@@ -11,6 +11,7 @@
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
+#include <freertos/semphr.h>
 #include <freertos/task.h>
 
 #include <RoboClaw.h>
@@ -21,7 +22,7 @@
 
 /* ----------------------------- RTE transport (micro-ROS) ----------------------------- */
 
-static constexpr bool     RTE_USE_USB_CDC   = false;        /* true: USB CDC (Serial), false: UART */
+static constexpr bool     RTE_USE_USB_CDC   = true;        /* true: USB CDC (Serial), false: UART */
 static constexpr uint32_t RTE_USB_BAUD      = 921600UL;
 
 static constexpr uint8_t  RTE_UART_INSTANCE = 2U;
@@ -76,6 +77,7 @@ static constexpr UBaseType_t RTE_CMD_VEL_QUEUE_DEPTH = 1U;
 /* ----------------------------- Extern objects (defined in config.cpp) ---------------- */
 
 extern QueueHandle_t xcmd_velQueue;
+extern SemaphoreHandle_t xRoboClawMutex;
 
 extern HardwareSerial rte_serial;
 
