@@ -1,108 +1,107 @@
-# Core System 2026  
-_Core System Mars Rover UdegSpace 2026”_
+# Core System 2026
 
-<p align="center">
-   <img src="docs/images/MarsRover.svg" alt="Mars Rover logo" height="200">
-</p>
+Core electronics, embedded firmware, and ROS 2 integration workspace for the UdeG Space 2026 rover platform.
 
----
+![Project logo](docs/images/MarsRover.svg)
 
-## 1 · Purpose
+## Overview
 
-This repository holds the **hardware, firmware and documentation** that make up the
-“Core System” of the 2026 rover Maya:
+This repository contains the validated `Kukulcan Rev A` controller hardware, the primary rover MCU firmware, and the ROS 2 workspace used to integrate the embedded system with the rest of the stack.
 
-- Real-time Main Control Unit (MCU)  
-- Navigation sensors (GNSS, IMU, barometer)  
-- Jetson-based compute interface  
-- Motor driver / RoboClaw connectors  
-- Mini-PCIe Wi-Fi HaLow socket  
-- CAD / PCB data and reference PDFs  
+The current main firmware path, `kukulcan/firmware/upio-ros2/`, is a working ESP32-S3 implementation built on Arduino, FreeRTOS, and micro-ROS, with an AUTOSAR-inspired layered architecture deployed on real hardware.
 
-Over time this repo will also host the **ROS 2 workspace** that connects the core
-system to the rest of the rover stack.
+This MCU sits at the intersection of the rover core system and the autonomous navigation stack for the Mars Rover UdeG Space Maya rover in URC 2026. It concentrates the odometry and control interfaces needed for vehicle state estimation and low-level motion integration, including wheel encoders, dual-IMU integration across the wider system, GNSS, altimeter data, communications with RoboClaw motor controllers, and communications with the main processing unit based on the NVIDIA Jetson Orin Nano.
 
----
+The platform has already been validated on real hardware and is intended to continue system-level validation during field testing, including work planned for the Mars Desert Research Station.
 
-## 2 · Repo layout
+## Current release state
 
-Current top-level layout:
+This repository is past initial bring-up and already contains active work in four areas:
 
-| Path                       | Contents                                                |
-|----------------------------|--------------------------------------------------------|
-| `kukulcan/hardware/`       | KiCad project for the MCU board, symbols, footprints, 3D models, generated outputs |
-| `kukulcan/firmware/upy/`   | MicroPython firmware (BSW drivers and App UI) for sensors and display |
-| `src/`                     | ROS 2 workspace root (will contain core ROS 2 packages) |
-| `docs/`                    | Datasheets, design notes, reference PDFs              |
-| `CONTRIBUTING.md`          | Contribution and workflow guidelines                   |
-| `LICENSE`                  | Project license                                        |
+- `kukulcan/hardware/`: KiCad MCU design, 3D exports, fabrication outputs, and PCBA files for `MCU RevA`
+- `kukulcan/firmware/upy/`: MicroPython-based sensor and UI bring-up
+- `kukulcan/firmware/upio-ros2/`: ESP32-S3 PlatformIO firmware using Arduino, FreeRTOS, micro-ROS, and an AUTOSAR-inspired layered architecture
+- `src/`: ROS 2 workspace with custom messages, a local `teleop_twistmux_node`, and vendored micro-ROS packages
 
-As the project grows, additional firmware projects (PlatformIO, ESP-IDF, etc.)
-will live under `kukulcan/firmware/<name>/`, and ROS 2 packages will live under
-`src/<package_name>/`.
+As of March 9, 2026, the repository should be treated as a mature beta integration branch preparing for additional beta releases before the first overall stable release.
 
----
+Current status summary:
 
-## 3 · Branch workflow (quick view)
+- hardware: validated RevA integration board with tracked manufacturing outputs
+- firmware: stable beta on real hardware with successful `pio run`
+- ROS 2 workspace: active and buildable for the currently used packages
+- main remaining functional gap before the first overall stable release: closed-loop velocity behavior
 
-```text
-main      ← protected, tagged releases only
-develop   ← integration / beta code
+Verified in this repository review:
 
-sw/*      ← short-lived software feature branches
-hw/*      ← short-lived hardware feature branches
-misc/*    ← docs, CI, repo-wide chores
-````
+- `colcon build --packages-select teleop_twistmux_node micro_ros_msgs drive_base_msgs`
+- maintainer-provided successful `pio run` result for `upio-ros2`
 
-Rules of thumb:
+## Release track
 
-* **main**
+Planned release sequence:
 
-  * Only updated via fast-forward from `develop` at known-good milestones.
-  * Tag releases here (e.g. `v0.1.0-beta`).
+1. More beta releases on `develop`
+2. One pre-final beta release to harden documentation, validation evidence, and reproducible builds
+3. First stable release after closed-loop behavior, validation evidence, and release documentation are finalized
 
-* **develop**
+## Highlights
 
-  * Always buildable.
-  * Integration branch for Kukulcan hardware + firmware + ROS 2 workspace.
+- `Kukulcan Rev A` is a 4-layer protected controller board built around an `ESP32-S3R8` with added `32 MB` flash
+- the firmware architecture treats micro-ROS as the effective RTE boundary and FreeRTOS tasks as the application execution model
+- the project has a reliable micro-ROS + FreeRTOS + Arduino implementation on the target MCU
+- the Jetson-side integration path is already designed into the hardware through the 40-pin expansion/control header
 
-* **feature branches (`sw/*`, `hw/*`, `misc/*`)**
+## Repository layout
 
-  * Always branch from `develop`.
-  * Squash-merge into `develop` when done, then delete the branch.
+| Path | Purpose |
+| --- | --- |
+| `kukulcan/hardware/` | MCU KiCad project, local libraries, manufacturing outputs |
+| `kukulcan/firmware/` | Embedded firmware projects |
+| `src/` | ROS 2 workspace packages and vendored dependencies |
+| `docs/` | Datasheets, design notes, images, and release support material |
+| `CONTRIBUTING.md` | Lightweight workflow and contribution rules |
 
----
+## Primary subsystems
 
-## 4 · Getting started (repo)
+- Hardware: [kukulcan/hardware/README.md](kukulcan/hardware/README.md)
+- Firmware: [kukulcan/firmware/README.md](kukulcan/firmware/README.md)
+- Main firmware track: [kukulcan/firmware/upio-ros2/README.md](kukulcan/firmware/upio-ros2/README.md)
 
-Clone and switch to the integration branch:
+## Firmware architecture direction
+
+The main embedded firmware track, `upio-ros2`, is not just an implementation of drivers and ROS transport. It is also the project's embedded software architecture reference:
+
+- application logic is kept separate from hardware-facing details
+- the runtime environment layer is effectively realized through the micro-ROS integration boundary
+- hardware-dependent behavior is pushed into HAL-style modules and lower layers
+- FreeRTOS tasking is used to preserve deterministic behavior across sensing, publishing, and actuation paths, effectively expressing the application layer execution model
+
+That AUTOSAR-inspired separation is already a validated project strength and should be treated as part of the beta release narrative. The same applies to the reliable micro-ROS + FreeRTOS + Arduino implementation on the target MCU, which meaningfully reduces integration friction for the rover stack.
+
+## Quick start
 
 ```bash
 git clone git@github.com:MarsRoverUdeGSpace/Core_System_2026.git
 cd Core_System_2026
-
-# For day-to-day work
 git checkout develop
 ```
 
-For now:
+ROS 2 packages can be listed with:
 
-* Hardware is under `kukulcan/hardware/MCU/` (open `MCU.kicad_pro` in KiCad).
-* MicroPython firmware is under `kukulcan/firmware/upy/`.
+```bash
+colcon list
+```
 
-ROS 2 packages will later be added under `src/` and built with `colcon` from the
-repo root.
+The `upio-ros2` firmware lives in:
 
----
+```bash
+cd kukulcan/firmware/upio-ros2
+pio run
+```
 
-## 5 · Roadmap (high-level)
+The hardware project opens from:
 
-* [x] Normalize repo layout (`docs/`, `kukulcan/{hardware,firmware}`, `src/`)
-* [x] Integrate MCU hardware design (KiCad)
-* [x] Integrate uPy firmware (GNSS, IMU, BMP, OLED UI)
-* [ ] Integrate ESP32 / PlatformIO core I/O firmware
-* [ ] Seed ROS 2 packages in `src/` for core system bring-up
-* [ ] Tag first stable beta and advance `main`
-
-````
-
+```text
+kukulcan/hardware/MCU/MCU.kicad_pro
+```

@@ -1,50 +1,83 @@
-# Repository Guidelines
+# AGENTS.md
 
-## Project Structure & Module Organization
+This file is for Codex and other repository-aware coding agents. It is not user-facing release documentation. Its purpose is to describe how the repository is organized, what is already implemented, and how an agent should work safely inside it.
 
-- `kukulcan/hardware/MCU/`: KiCad project files (`MCU.kicad_*`) and board exports (e.g., `MCU.stl`).
-- `kukulcan/hardware/Libraries/`: shared footprints and 3D models.
-- `kukulcan/hardware/mfr/`: manufacturing outputs (Gerbers, drills, job file, fab zip, BOM/CPL under `mfr/pcba/`).
-- `kukulcan/hardware/MCU/jlcpcb/`: local JLCPCB exports (`gerber/`, `production_files/`); keep out of commits unless explicitly requested.
-- `kukulcan/firmware/upy/`: MicroPython firmware (drivers and UI).
-- `src/`: ROS 2 workspace root (packages will live under `src/<package_name>/`).
-- `docs/`: datasheets, design notes, reference PDFs, and images.
-- `build/`, `install/`, `log/`: generated artifacts (do not edit by hand).
+## Repository status
 
-## Build, Test, and Development Commands
+As of March 9, 2026, this repository is an active beta-stage integration workspace for the UdeG Space 2026 core system. It already contains:
 
-- `idf.py build`: compile-check for ESP-IDF firmware (use within the relevant firmware subproject).
-- `idf.py -p /dev/ttyUSB0 flash`: flash ESP-IDF firmware to hardware.
-- `colcon build`: (future) ROS 2 workspace build from repo root once packages exist.
+- validated `Kukulcan Rev A` controller hardware sources and tracked manufacturing outputs
+- a working primary MCU firmware track in `kukulcan/firmware/upio-ros2/`
+- a legacy or bring-up-oriented MicroPython track in `kukulcan/firmware/upy/`
+- a ROS 2 workspace with local and vendored packages under `src/`
 
-If a module ships its own README, prefer those commands over generic ones.
+Do not describe `src/` as future-only. ROS 2 packages already exist and build in this repository.
 
-## Coding Style & Naming Conventions
+## Role of this file
 
-- Branches: `sw/*` for software, `hw/*` for hardware, `misc/*` for docs/CI chores.
-- ROS 2 packages should follow `src/<package_name>/` and standard ROS 2 naming.
-- Keep commits small and focused; align changes with the branch scope.
+Use this file as the top-level operating context for Codex work in this repository:
 
-## Testing Guidelines
+- prefer local subsystem READMEs for user-facing status and architecture descriptions
+- use this file for agent workflow, repository constraints, and subsystem routing
+- when a deeper `AGENTS.md` exists in a subdirectory, treat it as authoritative for work inside that subtree
 
-- No repo-wide test runner yet; validate per subsystem.
-- Firmware: use `idf.py build` for compile checks and run on target hardware when applicable.
-- Hardware: verify updates in KiCad; share artifacts or screenshots in PRs if they affect schematics/PCB.
+## Repository structure
 
-## Commit & Pull Request Guidelines
+- `kukulcan/hardware/MCU/`: KiCad project files, board exports, and generated hardware outputs
+- `kukulcan/hardware/Libraries/`: shared symbols, footprints, and 3D assets
+- `kukulcan/hardware/mfr/`: tracked fabrication outputs and PCBA files
+- `kukulcan/firmware/upy/`: MicroPython-based bring-up firmware
+- `kukulcan/firmware/upio-ros2/`: main ESP32-S3 firmware based on PlatformIO, Arduino, FreeRTOS, and micro-ROS
+- `src/`: ROS 2 workspace containing local packages and vendored dependencies
+- `docs/`: images, datasheets, and support documentation
+- `build/`, `install/`, `log/`: generated ROS 2 workspace outputs
 
-- Commit messages follow Conventional Commits with scoped types, e.g.:
-  - `feat(sw-can): add FDCAN filter`
-  - `fix(hw-mcu): correct USB D+ routing`
-  - `docs(imu): add calibration guide`
-- Keep the history clean: separate logical changes (design edits vs. exports), and squash before merging to `develop`.
-- For manufacturing updates, prefer a dedicated commit like `hw(mfr): update MCU RevA gerbers`.
-- Open PRs against `develop` and use squash-merge on approval.
-- PRs should include: a short description, linked issue (if any), and test/validation notes.
-- Use GitHub CLI when possible: `gh pr create --base develop --fill`.
+## Agent working rules
 
-## Security & Configuration Tips
+- Treat `kukulcan/firmware/upio-ros2/` as the main embedded firmware path unless the user explicitly asks for `upy/`
+- Treat `kukulcan/hardware/mfr/` as tracked release artifacts, not disposable exports
+- Avoid editing `build/`, `install/`, or `log/`
+- Be careful around KiCad-generated and binary hardware outputs; update them only when the hardware task requires it
+- If documentation is changed, keep `README.md` files user-facing and keep `AGENTS.md` files agent-facing
 
-- Avoid committing build artifacts; keep them in `build/` and `log/`.
-- Manufacturing exports in `kukulcan/hardware/mfr/` are tracked artifacts; regenerate when the PCB changes and label revs consistently (e.g., `MCU_revA_*`).
-- Large exports (e.g., `*.stl`) must use Git LFS; run `git lfs install` and ensure `.gitattributes` tracks `*.stl`.
+## Build and validation commands
+
+Use subsystem-specific commands when available.
+
+- ROS 2 workspace:
+  - `colcon list`
+  - `colcon build`
+  - `colcon build --packages-select <pkg>`
+- Main firmware:
+  - `cd kukulcan/firmware/upio-ros2`
+  - `pio run`
+  - `pio run -t upload`
+  - `pio device monitor -b 921600`
+- Hardware:
+  - use KiCad project files under `kukulcan/hardware/MCU/`
+  - manufacturing outputs in `kukulcan/hardware/mfr/` are tracked artifacts
+
+Do not default to `idf.py` for this repository unless the user explicitly introduces an ESP-IDF subproject.
+
+## Documentation expectations
+
+- `README.md` files should describe current status, architecture, validation, and known limitations of the relevant subsystem
+- `AGENTS.md` files should help Codex understand how to navigate and edit the repository safely
+- avoid putting maintainer to-do notes, placeholders, or editorial guidance into release-facing READMEs
+
+## Commit and PR guidance
+
+- Branches:
+  - `sw/*` for software and firmware
+  - `hw/*` for hardware
+  - `misc/*` for documentation, CI, and repository chores
+- Prefer Conventional Commits with scoped subjects
+- Keep logical hardware design edits separate from regenerated manufacturing outputs when practical
+- Open PRs against `develop`
+
+## Current repository realities Codex should know
+
+- `Kukulcan Rev A` hardware is documented as validated integration hardware
+- `upio-ros2` is a validated beta firmware track, not a speculative scaffold
+- the firmware architecture is intentionally AUTOSAR-inspired, with micro-ROS acting as the effective RTE boundary and FreeRTOS tasks expressing the application layer
+- the first overall stable release is still gated by remaining system-level work such as closed-loop velocity behavior and completion of a few pending hardware validations

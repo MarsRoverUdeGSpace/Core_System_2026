@@ -647,7 +647,7 @@
       "plot": "../mfr/",
       "pos_files": "../mfr/pcba/",
       "specctra_dsn": "",
-      "step": "MCU.stl",
+      "step": "outputs/MCU_board.step",
       "svg": "",
       "vrml": ""
     },
