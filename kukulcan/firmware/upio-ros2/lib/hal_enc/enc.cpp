@@ -120,14 +120,18 @@ bool Hal_Enc_Read(int32_t * left_ticks,
   bool left_speed_valid = false;
   bool right_speed_valid = false;
 
+  /* Encoder mapping is asymmetric by wiring:
+   * left  = RoboClaw 0x80 M1
+   * right = RoboClaw 0x81 M2
+   */
   const int32_t left_ticks_local =
       static_cast<int32_t>(roboclaw.ReadEncM1(ADDR_RB1, left_status, &left_valid));
   const int32_t right_ticks_local =
-      static_cast<int32_t>(roboclaw.ReadEncM1(ADDR_RB2, right_status, &right_valid));
+      static_cast<int32_t>(roboclaw.ReadEncM2(ADDR_RB2, right_status, &right_valid));
   const int32_t left_qpps_local =
       static_cast<int32_t>(roboclaw.ReadSpeedM1(ADDR_RB1, NULL, &left_speed_valid));
   const int32_t right_qpps_local =
-      static_cast<int32_t>(roboclaw.ReadSpeedM1(ADDR_RB2, NULL, &right_speed_valid));
+      static_cast<int32_t>(roboclaw.ReadSpeedM2(ADDR_RB2, NULL, &right_speed_valid));
 
   (void)xSemaphoreGive(xRoboClawMutex);
 

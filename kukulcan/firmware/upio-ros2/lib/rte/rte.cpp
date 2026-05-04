@@ -27,11 +27,11 @@ static constexpr const char * RTE_NODE       = "kukulcan";
 static constexpr const char * RTE_TOPIC_TEMP = "sensors/bme280/temperature";
 static constexpr const char * RTE_TOPIC_PRESS = "sensors/bme280/pressure";
 static constexpr const char * RTE_TOPIC_HUM  = "sensors/bme280/humidity";
-static constexpr const char * RTE_TOPIC_IMU  = "sensros/bno055/imu/data";
+static constexpr const char * RTE_TOPIC_IMU  = "sensors/bno055/imu/data";
 static constexpr const char * RTE_TOPIC_ENC_LEFT_TICKS  = "sensors/roboclaw/encoders/left_m1/ticks";
-static constexpr const char * RTE_TOPIC_ENC_RIGHT_TICKS = "sensors/roboclaw/encoders/right_m1/ticks";
+static constexpr const char * RTE_TOPIC_ENC_RIGHT_TICKS = "sensors/roboclaw/encoders/right_m2/ticks";
 static constexpr const char * RTE_TOPIC_ENC_LEFT_QPPS   = "sensors/roboclaw/encoders/left_m1/qpps";
-static constexpr const char * RTE_TOPIC_ENC_RIGHT_QPPS  = "sensors/roboclaw/encoders/right_m1/qpps";
+static constexpr const char * RTE_TOPIC_ENC_RIGHT_QPPS  = "sensors/roboclaw/encoders/right_m2/qpps";
 static constexpr const char * RTE_TOPIC_SUB  = "cmd_vel";
 static constexpr const char * RTE_TOPIC_MODE = "mode";
 

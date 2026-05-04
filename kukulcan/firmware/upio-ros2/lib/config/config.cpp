@@ -19,7 +19,7 @@ HardwareSerial rte_serial(RTE_UART_INSTANCE);
 
 /* Motor UART + RoboClaw driver. */
 HardwareSerial motorSerial(RBW_UART_INSTANCE);
-RoboClaw roboclaw(&motorSerial, 10000U);
+RoboClaw roboclaw(&motorSerial, 1000U);
 
 /* Shared I2C bus and sensors. */
 TwoWire &i2c_bus = Wire;
