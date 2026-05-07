@@ -10,6 +10,7 @@
 #include "enc.h"
 #include "imu.h"
 #include "alt.h"
+#include "gnss.h"
 #include "led_status.h"
 
 /* Task periods for deterministic scheduling. */
@@ -18,6 +19,7 @@ static const TickType_t motortask_period_ticks  = pdMS_TO_TICKS(10U);
 static const TickType_t pub_task_period_ticks   = pdMS_TO_TICKS(1U);
 static const TickType_t imu_pub_period_ticks    = pdMS_TO_TICKS(20U);
 static const TickType_t enc_pub_period_ticks    = pdMS_TO_TICKS(20U);
+static const TickType_t gnss_pub_period_ticks   = pdMS_TO_TICKS(200U);
 static const TickType_t bme_pub_period_ticks    = pdMS_TO_TICKS(1000U);
 
 /**
@@ -54,6 +56,7 @@ static void app_TaskPublisher(void * pvParameters)
   TickType_t last_wake = xTaskGetTickCount();
   TickType_t imu_wake = last_wake;
   TickType_t enc_wake = last_wake;
+  TickType_t gnss_wake = last_wake;
   TickType_t bme_wake = last_wake;
 
   for (;;)
@@ -71,6 +74,12 @@ static void app_TaskPublisher(void * pvParameters)
     {
       enc_wake += enc_pub_period_ticks;
       rte_PublishEncoders();
+    }
+
+    if ((now - gnss_wake) >= gnss_pub_period_ticks)
+    {
+      gnss_wake += gnss_pub_period_ticks;
+      rte_PublishGnss();
     }
 
     /* BME + debug publishers: fixed 1 Hz. */
@@ -133,6 +142,7 @@ void app_StartTasks(void)
   Hal_Imu_StartTask();
   Hal_Alt_StartTask();
   Hal_Enc_StartTask();
+  Hal_Gnss_StartTask();
 
   (void)xTaskCreatePinnedToCore(
       app_TaskMicroRos,

@@ -7,6 +7,7 @@
 #include "imu.h"
 #include "alt.h"
 #include "enc.h"
+#include "gnss.h"
 
 /* ----------------------------- Globals (defined here, declared extern in config.h) ----------------------------- */
 
@@ -151,4 +152,5 @@ void config_init(void)
   Hal_Imu_Init();
   Hal_Alt_Init();
   Hal_Enc_Init();
+  Hal_Gnss_Init();
 }

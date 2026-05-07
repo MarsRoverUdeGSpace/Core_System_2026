@@ -7,6 +7,7 @@
 #include "imu.h"
 #include "alt.h"
 #include "enc.h"
+#include "gnss.h"
 #include "motors.h"
 #include "led_status.h"
 
@@ -22,12 +23,15 @@
 #include <sensor_msgs/msg/fluid_pressure.h>
 #include <sensor_msgs/msg/relative_humidity.h>
 #include <sensor_msgs/msg/imu.h>
+#include <sensor_msgs/msg/nav_sat_fix.h>
+#include <sensor_msgs/msg/nav_sat_status.h>
 
 static constexpr const char * RTE_NODE       = "kukulcan";
 static constexpr const char * RTE_TOPIC_TEMP = "sensors/bme280/temperature";
 static constexpr const char * RTE_TOPIC_PRESS = "sensors/bme280/pressure";
 static constexpr const char * RTE_TOPIC_HUM  = "sensors/bme280/humidity";
 static constexpr const char * RTE_TOPIC_IMU  = "sensors/bno055/imu/data";
+static constexpr const char * RTE_TOPIC_GNSS = "sensors/gnss/fix";
 static constexpr const char * RTE_TOPIC_ENC_LEFT_TICKS  = "sensors/roboclaw/encoders/left_m1/ticks";
 static constexpr const char * RTE_TOPIC_ENC_RIGHT_TICKS = "sensors/roboclaw/encoders/right_m2/ticks";
 static constexpr const char * RTE_TOPIC_ENC_LEFT_QPPS   = "sensors/roboclaw/encoders/left_m1/qpps";
@@ -46,6 +50,7 @@ static rcl_publisher_t rte_pub_temp;
 static rcl_publisher_t rte_pub_press;
 static rcl_publisher_t rte_pub_hum;
 static rcl_publisher_t rte_pub_imu;
+static rcl_publisher_t rte_pub_gnss;
 static rcl_publisher_t rte_pub_enc_left_ticks;
 static rcl_publisher_t rte_pub_enc_right_ticks;
 static rcl_publisher_t rte_pub_enc_left_qpps;
@@ -56,11 +61,13 @@ static sensor_msgs__msg__Temperature      rte_temp_msg;
 static sensor_msgs__msg__FluidPressure    rte_press_msg;
 static sensor_msgs__msg__RelativeHumidity rte_hum_msg;
 static sensor_msgs__msg__Imu              rte_imu_msg;
+static sensor_msgs__msg__NavSatFix        rte_gnss_msg;
 static std_msgs__msg__Int32               rte_enc_left_ticks_msg;
 static std_msgs__msg__Int32               rte_enc_right_ticks_msg;
 static std_msgs__msg__Int32               rte_enc_left_qpps_msg;
 static std_msgs__msg__Int32               rte_enc_right_qpps_msg;
 static char                               rte_imu_frame_id[16];
+static char                               rte_gnss_frame_id[16];
 
 /* Subscriber state for cmd_vel. */
 static geometry_msgs__msg__Twist rte_sub_msg;
@@ -77,6 +84,8 @@ static uint32_t g_imu_pub_ok = 0U;
 static uint32_t g_imu_pub_miss = 0U;
 static uint32_t g_bme_pub_ok = 0U;
 static uint32_t g_bme_pub_miss = 0U;
+static uint32_t g_gnss_pub_ok = 0U;
+static uint32_t g_gnss_pub_miss = 0U;
 static uint32_t g_enc_pub_ok = 0U;
 static uint32_t g_enc_pub_miss = 0U;
 
@@ -267,6 +276,12 @@ static bool rte_MicroRos_Init(void)
       RTE_TOPIC_IMU));
 
   RCCHECK(rclc_publisher_init_best_effort(
+      &rte_pub_gnss,
+      &rte_state.node,
+      ROSIDL_GET_MSG_TYPE_SUPPORT(sensor_msgs, msg, NavSatFix),
+      RTE_TOPIC_GNSS));
+
+  RCCHECK(rclc_publisher_init_best_effort(
       &rte_pub_enc_left_ticks,
       &rte_state.node,
       ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32),
@@ -295,6 +310,12 @@ static bool rte_MicroRos_Init(void)
   rte_imu_msg.header.frame_id.capacity = sizeof(rte_imu_frame_id);
   (void)snprintf(rte_imu_frame_id, sizeof(rte_imu_frame_id), "imu_link");
   rte_imu_msg.header.frame_id.size = strlen(rte_imu_frame_id);
+
+  rte_gnss_msg.header.frame_id.data = rte_gnss_frame_id;
+  rte_gnss_msg.header.frame_id.size = 0U;
+  rte_gnss_msg.header.frame_id.capacity = sizeof(rte_gnss_frame_id);
+  (void)snprintf(rte_gnss_frame_id, sizeof(rte_gnss_frame_id), "gnss_link");
+  rte_gnss_msg.header.frame_id.size = strlen(rte_gnss_frame_id);
 
   /* ------ SUBSCRIBERS ------ */
 
@@ -363,6 +384,7 @@ static void rte_MicroRos_Deinit(void)
   (void)rcl_publisher_fini(&rte_pub_press, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_hum, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_imu, &rte_state.node);
+  (void)rcl_publisher_fini(&rte_pub_gnss, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_enc_left_ticks, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_enc_right_ticks, &rte_state.node);
   (void)rcl_publisher_fini(&rte_pub_enc_left_qpps, &rte_state.node);
@@ -564,6 +586,71 @@ void rte_PublishEncoders(void)
   else
   {
     g_enc_pub_miss++;
+    rte_ErrorLed_Pulse();
+  }
+}
+
+void rte_PublishGnss(void)
+{
+  if (g_ros_ready == false)
+  {
+    return;
+  }
+  rte_ErrorLed_Update();
+
+  gnss_data_t gnss;
+  if (!Hal_Gnss_GetLatest(&gnss))
+  {
+    g_gnss_pub_miss++;
+    rte_ErrorLed_Pulse();
+    return;
+  }
+  if (gnss.valid == false)
+  {
+    g_gnss_pub_miss++;
+    return;
+  }
+
+  if (gnss.has_fix)
+  {
+    rte_gnss_msg.status.status = sensor_msgs__msg__NavSatStatus__STATUS_FIX;
+    rte_gnss_msg.latitude = gnss.latitude_deg;
+    rte_gnss_msg.longitude = gnss.longitude_deg;
+    rte_gnss_msg.altitude = gnss.altitude_m;
+  }
+  else
+  {
+    rte_gnss_msg.status.status = sensor_msgs__msg__NavSatStatus__STATUS_NO_FIX;
+    rte_gnss_msg.latitude = 0.0;
+    rte_gnss_msg.longitude = 0.0;
+    rte_gnss_msg.altitude = 0.0;
+  }
+
+  rte_gnss_msg.status.service = sensor_msgs__msg__NavSatStatus__SERVICE_GPS;
+  for (size_t i = 0U; i < 9U; ++i)
+  {
+    rte_gnss_msg.position_covariance[i] = 0.0;
+  }
+  rte_gnss_msg.position_covariance_type =
+      sensor_msgs__msg__NavSatFix__COVARIANCE_TYPE_UNKNOWN;
+
+  if ((g_rcl_mutex != NULL) &&
+      (xSemaphoreTake(g_rcl_mutex, pdMS_TO_TICKS(2U)) == pdTRUE))
+  {
+    if (rcl_publish(&rte_pub_gnss, &rte_gnss_msg, NULL) == RCL_RET_OK)
+    {
+      g_gnss_pub_ok++;
+    }
+    else
+    {
+      g_gnss_pub_miss++;
+      rte_ErrorLed_Pulse();
+    }
+    (void)xSemaphoreGive(g_rcl_mutex);
+  }
+  else
+  {
+    g_gnss_pub_miss++;
     rte_ErrorLed_Pulse();
   }
 }

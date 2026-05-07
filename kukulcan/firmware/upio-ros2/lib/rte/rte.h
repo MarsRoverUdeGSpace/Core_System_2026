@@ -84,6 +84,11 @@ void rte_PublishImu(void);
 void rte_PublishEncoders(void);
 
 /**
+ * @brief Publish latest GNSS fix sample from cache.
+ */
+void rte_PublishGnss(void);
+
+/**
  * @brief Publish latest BME sample from cache.
  */
 void rte_PublishBme(void);

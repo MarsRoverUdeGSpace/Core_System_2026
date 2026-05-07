@@ -22,7 +22,7 @@
 
 /* ----------------------------- RTE transport (micro-ROS) ----------------------------- */
 
-static constexpr bool     RTE_USE_USB_CDC   = false;        /* true: USB CDC (Serial), false: UART */
+static constexpr bool     RTE_USE_USB_CDC   = true;        /* true: USB CDC (Serial), false: UART */
 static constexpr uint32_t RTE_USB_BAUD      = 921600UL;
 
 static constexpr uint8_t  RTE_UART_INSTANCE = 2U;
@@ -50,6 +50,7 @@ static constexpr uint32_t I2C_CLOCK_HZ      = 400000UL;
 
 static constexpr uint8_t  BME280_I2C_ADDR   = 0x77U;
 static constexpr uint8_t  BNO055_I2C_ADDR   = 0x28U;
+static constexpr uint8_t  NEO_M8N_I2C_ADDR  = 0x42U;
 static constexpr int32_t  BNO055_SENSOR_ID  = 55;
 
 /* ----------------------------- Status LEDs ------------------------------------------ */
