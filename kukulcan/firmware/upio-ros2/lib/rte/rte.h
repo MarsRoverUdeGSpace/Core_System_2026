@@ -81,7 +81,23 @@ void rte_SpinOnce(void);
  * @brief Publish latest IMU sample from cache.
  */
 void rte_PublishImu(void);
+
+/**
+ * @brief Publish latest magnetometer sample from the IMU cache.
+ */
+void rte_PublishMag(void);
+
 void rte_PublishEncoders(void);
+
+/**
+ * @brief Publish latest app-layer wheel odometry estimate.
+ */
+void rte_PublishOdom(void);
+
+/**
+ * @brief Publish latest GNSS fix sample from cache.
+ */
+void rte_PublishGnss(void);
 
 /**
  * @brief Publish latest BME sample from cache.

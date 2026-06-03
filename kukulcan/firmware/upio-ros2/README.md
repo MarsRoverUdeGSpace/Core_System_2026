@@ -11,6 +11,8 @@ This firmware is the current embedded integration path between the MCU hardware 
 - motor control tasking
 - encoder publishing
 - IMU publishing
+- GNSS publishing
+- wheel odometry publishing
 - barometer publishing
 - status LED handling
 
@@ -34,7 +36,7 @@ In repository terms, that maps roughly to:
 | ECU abstraction and complex drivers | `lib/hal_*`, parts of `lib/config/` |
 | MCU-specific configuration | `lib/config/`, board definition, Arduino/ESP32 interfaces |
 
-This architectural separation is already part of the validated firmware value and should be described as a deliberate beta feature, not just an internal code organization choice.
+This architectural separation is already part of the validated firmware value and should be described as a deliberate stable-release feature, not just an internal code organization choice.
 
 In practical terms for this project:
 
@@ -87,7 +89,42 @@ The current architecture follows the intent described in `AGENTS.md`:
 - one motor task consumes `cmd_vel` messages and applies a timeout stop
 - sensor work lives in dedicated HAL tasks instead of inside the executor
 
-This is a solid direction for beta hardening because it keeps sensor access and ROS communication separated.
+This is the stable release runtime model because it keeps sensor access, motor control, and ROS communication separated while preserving bounded latency for the AutoNav stack.
+
+## Sensor and odometry runtime behavior
+
+The firmware intentionally prioritizes motor control and the micro-ROS runtime loop while keeping sensor traffic at rates appropriate for localization and diagnostics:
+
+| Topic or operation | Configured rate | Notes |
+| --- | ---: | --- |
+| micro-ROS executor work | 200 Hz | `5 ms` application/RTE period |
+| motor control update | 100 Hz | `10 ms` motor task; unchanged commands are not retransmitted to RoboClaw |
+| `/sensors/bno055/imu/data` | 25 Hz | Quaternion, angular velocity, and linear acceleration with covariance |
+| `/sensors/bno055/mag` | 5 Hz | Magnetic field diagnostic/localization input |
+| `/sensors/gnss/fix` | 5 Hz | `NavSatFix`; fix status indicates whether coordinates are valid |
+| `/sensors/roboclaw/encoders/*/ticks` | 10 Hz | Primary raw encoder telemetry used to validate wheel acquisition |
+| `/sensors/roboclaw/encoders/*/qpps` | Diagnostic only | Sampled periodically; never gates tick validity or odometry |
+| `/odom` | 10 Hz | Wheel odometry with `odom` -> `base_footprint` frames |
+| `/sensors/bme280/*` | 1 Hz | Environmental telemetry |
+
+Sensor HAL tasks share the I2C bus through a mutex. The BNO055 task retries initialization after boot-time failures rather than requiring a controller reset. RoboClaw wheel tick reads are the validity source for odometry; optional QPPS reads are deliberately excluded from that path so a failed diagnostic query cannot discard usable encoder data.
+
+`/odom` must use reliable micro-ROS QoS. Its serialized `nav_msgs/msg/Odometry` payload includes two covariance matrices and exceeds the `512` byte best-effort XRCE transport MTU configured by the generated micro-ROS client library. Reliable transport provides fragmentation history for the full message; changing `/odom` back to best-effort results in a discovered publisher with no received odometry samples. Reliable publisher session waits are bounded to `5 ms` so an odometry acknowledgement delay cannot stall the shared publisher task and starve IMU or GNSS output.
+
+Timestamped localization topics use synchronized ROS epoch time only. The RTE captures a synchronized epoch/monotonic anchor and derives publish stamps locally without taking the micro-ROS transport mutex on every sensor sample. Before epoch synchronization is available, timestamped localization samples are withheld rather than being emitted in MCU uptime time. This prevents mixed time domains from entering EKF or NavSat processing.
+
+The publisher scheduler skips missed slots after a transport delay rather than replaying a burst of overdue messages. Health pings are serialized with the RCL transport and run at `1 Hz`; the independent motor command timeout remains `250 ms`.
+
+## Stable release integration notes
+
+The June 2026 stable release is the firmware contract used by the AutoNav GNSS waypoint navigation milestone. The important integration guarantees are:
+
+- `/odom` is firmware-owned wheel odometry derived from RoboClaw encoder ticks, calibrated ticks-per-revolution, and calibrated rover geometry.
+- `/sensors/bno055/imu/data`, `/sensors/bno055/mag`, `/sensors/gnss/fix`, and `/odom` use ROS epoch timestamps only.
+- magnetometer output is available for Jetson-side IMU/magnetic calibration checks.
+- reliable `/odom` publication is required because the payload is larger than the best-effort XRCE MTU.
+- reliable publisher waits are bounded and missed scheduler periods are skipped, preventing odometry acknowledgement delays from blocking GNSS or IMU output.
+- motor command handling responds to `cmd_vel` changes while retaining the independent `250 ms` stop timeout.
 
 ## Firmware flow
 
@@ -122,12 +159,26 @@ pio run -t upload
 
 ## Current validation status
 
-Maintainer-reported status for the current beta:
+Maintainer-reported status for the stable release:
 
-- Firmware status: stable beta, on track toward the first stable release
+- Firmware status: stable release
 - Tested hardware: Kukulcan PCB
 - Build status: successful `pio run`
-- Validation level: thoroughly tested by the maintainer for the current beta scope
+- Validation level: thoroughly tested by the maintainer for the current stable AutoNav integration scope
+
+Validated on physical hardware on 2026-05-26:
+
+- BNO055 IMU output observed near the configured `25 Hz` rate.
+- BNO055 magnetometer and GNSS output observed at `5 Hz`.
+- RoboClaw left and right tick topics observed near the configured `10 Hz` rate after eliminating unnecessary UART traffic and optional-QPPS gating.
+- Reliable `/odom` output observed at `10 Hz` while stationary, with `frame_id: odom`, `child_frame_id: base_footprint`, valid timestamp, and zero stationary twist.
+
+Validated again on physical hardware on 2026-05-27 after the ROS epoch and reliable-publisher scheduling fix:
+
+- `/sensors/bno055/imu/data`, `/sensors/gnss/fix`, and `/odom` reported ROS epoch timestamps in the same time domain; the prior IMU uptime stamp failure was removed.
+- `/odom` held near `10.2 Hz`, `/sensors/gnss/fix` near `4.8-5.0 Hz`, and `/sensors/bno055/mag` near `5.0 Hz` without the earlier multi-second publication stalls.
+- `/sensors/bno055/imu/data` recovered to approximately `22-23.6 Hz` during the captured sample. This is adequate for the current PCB/EKF integration gate, but remains below the configured `25 Hz` target and should be monitored during motion testing.
+- Short zero/minimum intervals were still visible in `ros2 topic hz` output. No multi-second starvation remained, but transport jitter should be rechecked if EKF timing warnings reappear.
 
 Latest confirmed build result provided by the maintainer:
 
@@ -147,6 +198,26 @@ ros2 run micro_ros_agent micro_ros_agent serial --dev /dev/ttyACM0 -b 921600
 
 The same workflow can also be run from Docker, which is the expected Jetson-side deployment path.
 
+## Hardware smoke test
+
+After flashing, verify sensor and wheel odometry health before enabling higher-level localization or navigation:
+
+```bash
+pio run -t upload
+ros2 topic hz /sensors/bno055/imu/data
+ros2 topic hz /sensors/bno055/mag
+ros2 topic hz /sensors/gnss/fix
+ros2 topic hz /sensors/roboclaw/encoders/left_m1/ticks
+ros2 topic hz /sensors/roboclaw/encoders/right_m2/ticks
+ros2 topic info -v /odom
+ros2 topic echo --once /odom
+ros2 topic hz /odom
+```
+
+Expected stationary result: the IMU is close to `25 Hz`; magnetometer and GNSS are close to `5 Hz`; encoder tick topics are close to `10 Hz`; `/odom` reports reliable QoS and publishes close to `10 Hz` with zero twist. A GNSS message with `status: -1` and zero coordinates confirms communication but means no usable satellite fix has been acquired yet.
+
+All localization stamps must be in ROS epoch time. Any IMU stamp near controller uptime rather than the current ROS epoch is a firmware fault and blocks EKF/NavSat testing.
+
 ## Validated behavior
 
 - micro-ROS transport and executor integration
@@ -154,8 +225,13 @@ The same workflow can also be run from Docker, which is the expected Jetson-side
 - AUTOSAR-inspired layered firmware structure validated in real implementation
 - `cmd_vel` handling for motor commands
 - sensor publishing pipeline
+- recoverable BNO055 initialization and serialized shared-I2C access
+- RoboClaw encoder acquisition sufficient for wheel odometry
+- reliable wheel odometry publication sized for XRCE transport constraints
+- epoch-only localization stamping with bounded reliable publication latency
 
-## Known beta limitation
+## Operational notes
 
-- Motor control is still open-loop for `cmd_vel`
-- Closed-loop velocity behavior is the main remaining functional item before the first overall stable release
+- Motor control still uses the current low-level command path with safety timeout handling.
+- GNSS output requires an outdoor/adequate-signal fix before coordinates are usable for waypoint navigation.
+- If EKF timing warnings reappear, first recheck ROS epoch stamping, reliable `/odom` QoS, and publisher scheduler latency before retuning localization.

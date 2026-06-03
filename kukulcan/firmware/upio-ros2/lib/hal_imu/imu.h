@@ -13,6 +13,9 @@ typedef struct
   float ax;
   float ay;
   float az;
+  float mx;
+  float my;
+  float mz;
   uint32_t seq;
   bool  valid;
 } imu_data_t;
@@ -34,8 +37,12 @@ bool Hal_Imu_GetLatest(imu_data_t * out);
  * @param[out] accel_x Linear acceleration x (m/s^2).
  * @param[out] accel_y Linear acceleration y (m/s^2).
  * @param[out] accel_z Linear acceleration z (m/s^2).
+ * @param[out] mag_x Magnetic field x (tesla).
+ * @param[out] mag_y Magnetic field y (tesla).
+ * @param[out] mag_z Magnetic field z (tesla).
  * @return true on success, false on invalid arguments or IMU not ready.
  */
 bool Hal_Imu_Read(float * quat_w, float * quat_x, float * quat_y, float * quat_z,
                   float * gyro_x, float * gyro_y, float * gyro_z,
-                  float * accel_x, float * accel_y, float * accel_z);
+                  float * accel_x, float * accel_y, float * accel_z,
+                  float * mag_x, float * mag_y, float * mag_z);

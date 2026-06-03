@@ -62,7 +62,10 @@ The subtree already supports and documents:
 - motor-control task separation from ROS executor servicing
 - encoder publishing
 - IMU publishing
+- BNO055 magnetometer publishing as `sensor_msgs/MagneticField` on `/sensors/bno055/mag`
 - BME publishing
+- GNSS `NavSatFix` publishing
+- app-layer encoder wheel odometry publishing on `/odom`
 - LED status handling
 - serial-agent workflow used with `micro_ros_agent`
 
@@ -77,6 +80,10 @@ Current architecture expectations:
 - hardware-facing work stays in HAL-style modules
 - configuration and shared objects live in `lib/config/`
 - application logic should not absorb hardware-specific details unnecessarily
+- localization messages must use ROS epoch stamps consistently; never publish a fallback MCU uptime stamp once ROS consumers may fuse the stream
+- `/odom` remains reliable because the covariance-bearing message exceeds the configured `512` byte best-effort XRCE MTU, but reliable publisher waits must stay bounded so odometry cannot stall IMU/GNSS output
+- periodic RMW health/time calls must use the RCL transport mutex; the micro-ROS stack is not a concurrent side channel for publisher tasks
+- after a delayed publication cycle, drop missed slots instead of burst-publishing overdue localization messages
 
 If adding features, prefer extending the appropriate layer instead of bypassing it.
 
@@ -92,6 +99,20 @@ Validated agent command currently documented for the project:
 
 When making firmware changes, prefer validating with `pio run` if the environment allows it.
 
+For localization-affecting changes, verify on hardware before committing:
+
+- `/sensors/bno055/imu/data`, `/sensors/gnss/fix`, and `/odom` stamps are all current ROS epoch time, not MCU uptime
+- expected nominal output is IMU near `25 Hz`, magnetometer/GNSS near `5 Hz`, and `/odom` near `10 Hz`
+- no multi-second publication gaps are introduced by reliable `/odom` delivery
+- `status: -1` with zero GNSS coordinates is a valid no-fix report; require `status: 0` outdoors before evaluating navigation position
+
+When changing the number of micro-ROS entities, also check the generated rmw micro XRCE-DDS limits. This firmware uses a project-local `kukulcan-colcon.meta` through `board_microros_user_meta` to raise `RMW_UXRCE_MAX_PUBLISHERS` above the default. If a new publisher/subscriber makes the ESP32 partially connect to the agent, show topics briefly, then restart, suspect a strict `RCCHECK(...)` failure during entity creation caused by these limits. After changing the meta file, force regeneration with:
+
+- `pio run -t clean_microros`
+- `pio run`
+
+Confirm the generated value in `.pio/libdeps/kukulcan/micro_ros_platformio/libmicroros/include/rmw_microxrcedds_c/config.h`.
+
 ## Editing guidance
 
 - Keep Doxygen-style headers consistent with existing files
@@ -105,4 +126,5 @@ When making firmware changes, prefer validating with `pio run` if the environmen
 - this firmware is already considered a stable beta by the maintainer
 - the architecture itself is part of the delivered value, not just an implementation detail
 - micro-ROS on FreeRTOS with Arduino is intentionally emphasized because it is reliably implemented here on real hardware
+- 2026-05-27 PCB validation confirmed epoch-aligned IMU/GNSS/odom stamps and removed multi-second publish stalls after bounding reliable transport waits; observed IMU rate was about `22-23.6 Hz`, slightly below its `25 Hz` configuration target
 - the main known functional limitation before the first overall stable release is closed-loop velocity behavior

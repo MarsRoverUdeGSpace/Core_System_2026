@@ -50,6 +50,7 @@ static constexpr uint32_t I2C_CLOCK_HZ      = 400000UL;
 
 static constexpr uint8_t  BME280_I2C_ADDR   = 0x77U;
 static constexpr uint8_t  BNO055_I2C_ADDR   = 0x28U;
+static constexpr uint8_t  NEO_M8N_I2C_ADDR  = 0x42U;
 static constexpr int32_t  BNO055_SENSOR_ID  = 55;
 
 /* ----------------------------- Status LEDs ------------------------------------------ */
@@ -78,6 +79,7 @@ static constexpr UBaseType_t RTE_CMD_VEL_QUEUE_DEPTH = 1U;
 
 extern QueueHandle_t xcmd_velQueue;
 extern SemaphoreHandle_t xRoboClawMutex;
+extern SemaphoreHandle_t xI2cMutex;
 
 extern HardwareSerial rte_serial;
 

@@ -4,7 +4,7 @@ This file is for Codex and other repository-aware coding agents. It is not user-
 
 ## Repository status
 
-As of March 9, 2026, this repository is an active beta-stage integration workspace for the UdeG Space 2026 core system. It already contains:
+As of June 2, 2026, this repository is the stable core-system release line for the UdeG Space 2026 rover MCU and embedded ROS interface. It already contains:
 
 - validated `Kukulcan Rev A` controller hardware sources and tracked manufacturing outputs
 - a working primary MCU firmware track in `kukulcan/firmware/upio-ros2/`
@@ -78,6 +78,7 @@ Do not default to `idf.py` for this repository unless the user explicitly introd
 ## Current repository realities Codex should know
 
 - `Kukulcan Rev A` hardware is documented as validated integration hardware
-- `upio-ros2` is a validated beta firmware track, not a speculative scaffold
+- `upio-ros2` is a validated stable firmware track, not a speculative scaffold
 - the firmware architecture is intentionally AUTOSAR-inspired, with micro-ROS acting as the effective RTE boundary and FreeRTOS tasks expressing the application layer
-- the first overall stable release is still gated by remaining system-level work such as closed-loop velocity behavior and completion of a few pending hardware validations
+- as of 2026-05-27, use firmware-owned `/odom`, `/sensors/bno055/imu/data`, and `/sensors/gnss/fix` as the tested raw localization interface; stamps must remain ROS epoch time and `/odom` reliable publication must not starve sensor topics
+- stable AutoNav integration depends on the current `/odom`, BNO055 IMU/magnetometer, GNSS, scheduler, and `cmd_vel` contract; do not relax epoch-only timestamps, reliable `/odom`, or bounded publisher waits without field retesting

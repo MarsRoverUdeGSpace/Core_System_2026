@@ -109,9 +109,16 @@ bool Hal_Alt_Read(float * temp_c, float * press_pa, float * hum_pct)
     return false;
   }
 
+  if ((xI2cMutex == NULL) ||
+      (xSemaphoreTake(xI2cMutex, pdMS_TO_TICKS(10U)) != pdTRUE))
+  {
+    return false;
+  }
+
   const float temp = bme280.readTemperature();
   const float press = bme280.readPressure();
   const float hum = bme280.readHumidity();
+  (void)xSemaphoreGive(xI2cMutex);
 
   *temp_c = temp;
   *press_pa = press;
