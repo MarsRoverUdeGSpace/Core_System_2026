@@ -23,33 +23,41 @@ This repository is past initial bring-up and already contains active work in fou
 - `kukulcan/firmware/upio-ros2/`: ESP32-S3 PlatformIO firmware using Arduino, FreeRTOS, micro-ROS, and an AUTOSAR-inspired layered architecture
 - `src/`: ROS 2 workspace with custom messages, a local `teleop_twistmux_node`, and vendored micro-ROS packages
 
-As of March 9, 2026, the repository should be treated as a mature beta integration branch preparing for additional beta releases before the first overall stable release.
+As of June 2, 2026, this repository is the stable core-system release line for the rover MCU and ROS-facing embedded interface used by AutoNav.
 
 Current status summary:
 
 - hardware: validated RevA integration board with tracked manufacturing outputs
-- firmware: stable beta on real hardware with successful `pio run`
+- firmware: stable release on real hardware with successful `pio run`
+- localization interface: firmware-owned epoch-stamped `/odom`, direct BNO055 IMU, magnetometer, and GNSS streams validated on the Kukulcan PCB and consumed by the AutoNav stack
 - ROS 2 workspace: active and buildable for the currently used packages
-- main remaining functional gap before the first overall stable release: closed-loop velocity behavior
+- control interface: `cmd_vel` response and motor timeout behavior corrected for the stable AutoNav integration path
 
 Verified in this repository review:
 
 - `colcon build --packages-select teleop_twistmux_node micro_ros_msgs drive_base_msgs`
 - maintainer-provided successful `pio run` result for `upio-ros2`
 
-## Release track
+## Stable release notes
 
-Planned release sequence:
+This release promotes `feature/imu-mag-calibration` as the stable source line for `develop` and `main`.
 
-1. More beta releases on `develop`
-2. One pre-final beta release to harden documentation, validation evidence, and reproducible builds
-3. First stable release after closed-loop behavior, validation evidence, and release documentation are finalized
+Release highlights:
+
+- integrated wheel odometry publication from RoboClaw encoder ticks
+- added BNO055 magnetometer publishing for Jetson-side calibration and localization checks
+- stabilized GNSS `NavSatFix`, IMU, magnetometer, and `/odom` timestamps in ROS epoch time
+- made `/odom` reliable so full `nav_msgs/msg/Odometry` samples survive XRCE transport size limits
+- bounded reliable publisher waits and scheduler catch-up behavior so delayed odometry acknowledgements do not starve IMU/GNSS publication
+- calibrated odometry geometry and ticks-per-revolution values for the physical rover
+- corrected `cmd_vel` response behavior and retained independent motor safety timeout handling
 
 ## Highlights
 
 - `Kukulcan Rev A` is a 4-layer protected controller board built around an `ESP32-S3R8` with added `32 MB` flash
 - the firmware architecture treats micro-ROS as the effective RTE boundary and FreeRTOS tasks as the application execution model
 - the project has a reliable micro-ROS + FreeRTOS + Arduino implementation on the target MCU
+- firmware `/odom` and direct IMU/GNSS topics now provide the validated inputs for Jetson-side EKF/global-localization testing
 - the Jetson-side integration path is already designed into the hardware through the 40-pin expansion/control header
 
 ## Repository layout
@@ -77,14 +85,14 @@ The main embedded firmware track, `upio-ros2`, is not just an implementation of 
 - hardware-dependent behavior is pushed into HAL-style modules and lower layers
 - FreeRTOS tasking is used to preserve deterministic behavior across sensing, publishing, and actuation paths, effectively expressing the application layer execution model
 
-That AUTOSAR-inspired separation is already a validated project strength and should be treated as part of the beta release narrative. The same applies to the reliable micro-ROS + FreeRTOS + Arduino implementation on the target MCU, which meaningfully reduces integration friction for the rover stack.
+That AUTOSAR-inspired separation is already a validated project strength and should be treated as part of the stable release narrative. The same applies to the reliable micro-ROS + FreeRTOS + Arduino implementation on the target MCU, which meaningfully reduces integration friction for the rover stack.
 
 ## Quick start
 
 ```bash
 git clone git@github.com:MarsRoverUdeGSpace/Core_System_2026.git
 cd Core_System_2026
-git checkout develop
+git checkout main
 ```
 
 ROS 2 packages can be listed with:

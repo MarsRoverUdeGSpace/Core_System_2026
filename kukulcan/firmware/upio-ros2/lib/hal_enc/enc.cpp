@@ -4,12 +4,13 @@
 #include <freertos/semphr.h>
 #include <freertos/task.h>
 
-static const TickType_t enc_task_period_ticks = pdMS_TO_TICKS(20U);
+static const TickType_t enc_task_period_ticks = pdMS_TO_TICKS(50U);
 
 static enc_data_t g_enc_cache;
 static SemaphoreHandle_t g_enc_mutex = NULL;
 static TaskHandle_t g_enc_task = NULL;
 static uint32_t g_enc_seq = 0U;
+static constexpr uint32_t ENC_QPPS_READ_DIVISOR = 10U;
 
 static void enc_Task(void * pvParameters)
 {
@@ -19,25 +20,29 @@ static void enc_Task(void * pvParameters)
   for (;;)
   {
     enc_data_t local;
-    local.valid = false;
-
+    local.left_qpps = 0;
+    local.right_qpps = 0;
+    local.qpps_valid = false;
+    const bool read_qpps = ((g_enc_seq % ENC_QPPS_READ_DIVISOR) == 0U);
     if (Hal_Enc_Read(&local.left_ticks,
                      &local.right_ticks,
                      &local.left_qpps,
                      &local.right_qpps,
                      &local.left_status,
-                     &local.right_status))
+                     &local.right_status,
+                     read_qpps,
+                     &local.qpps_valid))
     {
       local.valid = true;
-    }
-    local.seq = ++g_enc_seq;
+      local.seq = ++g_enc_seq;
 
-    if (g_enc_mutex != NULL)
-    {
-      if (xSemaphoreTake(g_enc_mutex, pdMS_TO_TICKS(1U)) == pdTRUE)
+      if (g_enc_mutex != NULL)
       {
-        g_enc_cache = local;
-        (void)xSemaphoreGive(g_enc_mutex);
+        if (xSemaphoreTake(g_enc_mutex, pdMS_TO_TICKS(1U)) == pdTRUE)
+        {
+          g_enc_cache = local;
+          (void)xSemaphoreGive(g_enc_mutex);
+        }
       }
     }
 
@@ -98,11 +103,14 @@ bool Hal_Enc_Read(int32_t * left_ticks,
                   int32_t * left_qpps,
                   int32_t * right_qpps,
                   uint8_t * left_status,
-                  uint8_t * right_status)
+                  uint8_t * right_status,
+                  const bool read_qpps,
+                  bool * qpps_valid)
 {
   if ((left_ticks == NULL) || (right_ticks == NULL) ||
       (left_qpps == NULL) || (right_qpps == NULL) ||
-      (left_status == NULL) || (right_status == NULL))
+      (left_status == NULL) || (right_status == NULL) ||
+      (qpps_valid == NULL))
   {
     return false;
   }
@@ -117,8 +125,6 @@ bool Hal_Enc_Read(int32_t * left_ticks,
 
   bool left_valid = false;
   bool right_valid = false;
-  bool left_speed_valid = false;
-  bool right_speed_valid = false;
 
   /* Encoder mapping is asymmetric by wiring:
    * left  = RoboClaw 0x80 M1
@@ -128,14 +134,22 @@ bool Hal_Enc_Read(int32_t * left_ticks,
       static_cast<int32_t>(roboclaw.ReadEncM1(ADDR_RB1, left_status, &left_valid));
   const int32_t right_ticks_local =
       static_cast<int32_t>(roboclaw.ReadEncM2(ADDR_RB2, right_status, &right_valid));
-  const int32_t left_qpps_local =
-      static_cast<int32_t>(roboclaw.ReadSpeedM1(ADDR_RB1, NULL, &left_speed_valid));
-  const int32_t right_qpps_local =
-      static_cast<int32_t>(roboclaw.ReadSpeedM2(ADDR_RB2, NULL, &right_speed_valid));
+
+  int32_t left_qpps_local = 0;
+  int32_t right_qpps_local = 0;
+  bool left_speed_valid = false;
+  bool right_speed_valid = false;
+  if (read_qpps && left_valid && right_valid)
+  {
+    left_qpps_local =
+        static_cast<int32_t>(roboclaw.ReadSpeedM1(ADDR_RB1, NULL, &left_speed_valid));
+    right_qpps_local =
+        static_cast<int32_t>(roboclaw.ReadSpeedM2(ADDR_RB2, NULL, &right_speed_valid));
+  }
 
   (void)xSemaphoreGive(xRoboClawMutex);
 
-  if ((!left_valid) || (!right_valid) || (!left_speed_valid) || (!right_speed_valid))
+  if ((!left_valid) || (!right_valid))
   {
     return false;
   }
@@ -144,5 +158,6 @@ bool Hal_Enc_Read(int32_t * left_ticks,
   *right_ticks = right_ticks_local;
   *left_qpps = left_qpps_local;
   *right_qpps = right_qpps_local;
+  *qpps_valid = read_qpps && left_speed_valid && right_speed_valid;
   return true;
 }

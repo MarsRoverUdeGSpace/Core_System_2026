@@ -14,4 +14,8 @@ The firmware work in this repository is split into two tracks with different rol
 ## Projects
 
 - `upy/`: MicroPython-based rapid prototyping and validation path
-- `upio-ros2/`: main firmware implementation and primary release-facing embedded stack
+- `upio-ros2/`: stable firmware implementation and primary release-facing embedded stack
+
+## Current validation
+
+Physical Kukulcan validation confirmed the `upio-ros2/` ROS-facing localization contract: firmware publishes epoch-stamped `/odom`, `/sensors/bno055/imu/data`, `/sensors/bno055/mag`, and `/sensors/gnss/fix` without the prior multi-second publish stalls. The AutoNav Jetson integration path consumes this odometry, IMU, magnetometer, and GNSS contract directly; detailed rates, transport constraints, scheduling behavior, and smoke-test commands are documented in [`upio-ros2/README.md`](upio-ros2/README.md).

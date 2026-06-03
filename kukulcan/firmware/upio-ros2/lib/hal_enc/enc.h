@@ -15,6 +15,7 @@ typedef struct
   int32_t right_qpps;
   uint8_t left_status;
   uint8_t right_status;
+  bool qpps_valid;
   uint32_t seq;
   bool valid;
 } enc_data_t;
@@ -24,7 +25,7 @@ void Hal_Enc_StartTask(void);
 bool Hal_Enc_GetLatest(enc_data_t * out);
 
 /**
- * @brief Read raw encoder counters and speeds from the configured RoboClaw channels.
+ * @brief Read raw encoder counters and optional speeds from the configured RoboClaw channels.
  *
  * Mapping:
  * - left  = RoboClaw 0x80 M1
@@ -36,11 +37,15 @@ bool Hal_Enc_GetLatest(enc_data_t * out);
  * @param[out] right_qpps Raw encoder speed for right M2 in quadrature pulses per second.
  * @param[out] left_status RoboClaw status byte for left encoder read.
  * @param[out] right_status RoboClaw status byte for right encoder read.
- * @return true on success, false on invalid arguments or bus/read failure.
+ * @param[in] read_qpps Whether to perform optional wheel-speed reads.
+ * @param[out] qpps_valid True when optional wheel-speed reads succeeded.
+ * @return true when both encoder counters were read successfully.
  */
 bool Hal_Enc_Read(int32_t * left_ticks,
                   int32_t * right_ticks,
                   int32_t * left_qpps,
                   int32_t * right_qpps,
                   uint8_t * left_status,
-                  uint8_t * right_status);
+                  uint8_t * right_status,
+                  bool read_qpps,
+                  bool * qpps_valid);

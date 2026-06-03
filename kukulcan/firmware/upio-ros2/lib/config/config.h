@@ -22,7 +22,7 @@
 
 /* ----------------------------- RTE transport (micro-ROS) ----------------------------- */
 
-static constexpr bool     RTE_USE_USB_CDC   = true;        /* true: USB CDC (Serial), false: UART */
+static constexpr bool     RTE_USE_USB_CDC   = false;        /* true: USB CDC (Serial), false: UART */
 static constexpr uint32_t RTE_USB_BAUD      = 921600UL;
 
 static constexpr uint8_t  RTE_UART_INSTANCE = 2U;
@@ -79,6 +79,7 @@ static constexpr UBaseType_t RTE_CMD_VEL_QUEUE_DEPTH = 1U;
 
 extern QueueHandle_t xcmd_velQueue;
 extern SemaphoreHandle_t xRoboClawMutex;
+extern SemaphoreHandle_t xI2cMutex;
 
 extern HardwareSerial rte_serial;
 

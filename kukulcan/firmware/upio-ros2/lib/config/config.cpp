@@ -14,6 +14,7 @@
 /* Queue used to pass cmd_vel messages to the app layer. */
 QueueHandle_t xcmd_velQueue = NULL;
 SemaphoreHandle_t xRoboClawMutex = NULL;
+SemaphoreHandle_t xI2cMutex = NULL;
 
 /* RTE serial (UART transport when not using USB CDC). */
 HardwareSerial rte_serial(RTE_UART_INSTANCE);
@@ -95,6 +96,14 @@ static void roboclaw_mutex_init(void)
   }
 }
 
+static void i2c_mutex_init(void)
+{
+  if (xI2cMutex == NULL)
+  {
+    xI2cMutex = xSemaphoreCreateMutex();
+  }
+}
+
 /**
  * @brief Initialize the motor UART and RoboClaw driver.
  */
@@ -147,6 +156,7 @@ void config_init(void)
   leds_init_default_off();
   cmd_vel_queue_init();
   roboclaw_mutex_init();
+  i2c_mutex_init();
   motor_bus_init();
   sensors_i2c_init();
   Hal_Imu_Init();

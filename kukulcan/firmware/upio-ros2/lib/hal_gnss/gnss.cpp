@@ -2,8 +2,12 @@
 
 #include <TinyGPSPlus.h>
 
-static const TickType_t gnss_task_period_ticks = pdMS_TO_TICKS(200U);
-static constexpr uint8_t GNSS_READ_CHUNK_BYTES = 32U;
+/*
+ * Poll fast enough to consume the NMEA stream without monopolizing shared I2C.
+ * At 50 ms, 64-byte reads can consume up to 1280 bytes/s.
+ */
+static const TickType_t gnss_task_period_ticks = pdMS_TO_TICKS(50U);
+static constexpr uint8_t GNSS_READ_CHUNK_BYTES = 64U;
 static constexpr uint32_t GNSS_FIX_MAX_AGE_MS = 2000UL;
 
 static TinyGPSPlus g_gnss_parser;
@@ -15,8 +19,15 @@ static bool g_gnss_present = false;
 
 static bool gnss_i2c_device_present(void)
 {
+  if ((xI2cMutex == NULL) ||
+      (xSemaphoreTake(xI2cMutex, pdMS_TO_TICKS(10U)) != pdTRUE))
+  {
+    return false;
+  }
+
   i2c_bus.beginTransmission(NEO_M8N_I2C_ADDR);
   const uint8_t err = i2c_bus.endTransmission(true);
+  (void)xSemaphoreGive(xI2cMutex);
   return (err == 0U);
 }
 
@@ -82,16 +93,22 @@ static void gnss_Task(void * pvParameters)
 
     if (g_gnss_present)
     {
-      const uint8_t bytes_requested = i2c_bus.requestFrom(NEO_M8N_I2C_ADDR, GNSS_READ_CHUNK_BYTES);
-      (void)bytes_requested;
-
-      while (i2c_bus.available() > 0)
+      if ((xI2cMutex != NULL) &&
+          (xSemaphoreTake(xI2cMutex, pdMS_TO_TICKS(10U)) == pdTRUE))
       {
-        const uint8_t c = i2c_bus.read();
-        if (c != 0xFFU)
+        const uint8_t bytes_requested =
+            i2c_bus.requestFrom(NEO_M8N_I2C_ADDR, GNSS_READ_CHUNK_BYTES);
+        (void)bytes_requested;
+
+        while (i2c_bus.available() > 0)
         {
-          (void)g_gnss_parser.encode(static_cast<char>(c));
+          const uint8_t c = i2c_bus.read();
+          if (c != 0xFFU)
+          {
+            (void)g_gnss_parser.encode(static_cast<char>(c));
+          }
         }
+        (void)xSemaphoreGive(xI2cMutex);
       }
     }
 
